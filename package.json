@@ -42,6 +42,7 @@
     "bootstrap": "^3.3.6"
   },
   "devDependencies": {
+    "angular2-jwt": "^0.1.16",
     "concurrently": "^2.0.0",
     "lite-server": "^2.2.0",
     "typescript": "^1.8.10",
