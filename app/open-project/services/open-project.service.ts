@@ -3,7 +3,7 @@ import { Headers, Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map'
 
-import { OpenProject } from '../../models/open-project.model';
+import { OpenProject } from '../models/open-project.model';
 
 @Injectable()
 export class OpenProjectService {

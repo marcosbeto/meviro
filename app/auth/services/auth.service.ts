@@ -1,4 +1,3 @@
-
 import {Injectable, NgZone} from '@angular/core'; 
 import {AuthHttp, tokenNotExpired} from 'angular2-jwt';
 import { Headers, Http } from '@angular/http';

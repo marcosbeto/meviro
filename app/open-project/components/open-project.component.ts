@@ -2,11 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output, DoCheck } from '@angula
 import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 
 import { OpenProject } from '../models/open-project.model';
-import { OpenProjectService } from '../services/open-project/open-project.service';
-import { AuthService } from '../services/auth/auth.service';
+import { OpenProjectService } from '../services/open-project.service';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
-	templateUrl: 'app/templates/open-project.component.html',
+	templateUrl: 'app/open-project/templates/open-project.component.html',
 	// styleUrls: ['app/hero-detail.component.css'],
 })
 

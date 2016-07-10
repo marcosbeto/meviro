@@ -1,15 +1,10 @@
 import { Component } from '@angular/core';
-// import { RouteConfig, ROUTER_PROVIDERS } from '@angular/router-deprecated';
 import { Router, ROUTER_DIRECTIVES, CanActivate }    from '@angular/router';
 
-import { AuthService } from './services/auth/auth.service';
-import { OpenProjectService } from './services/open-project/open-project.service'; 
-
-import { OpenProjectComponent } from './components/open-project.component';
+import { AuthService } from './auth/services/auth.service';
+import { OpenProjectService } from './open-project/services/open-project.service'; 
+import { OpenProjectComponent } from './open-project/components/open-project.component';
 import { APP_ROUTER_PROVIDERS } from './app.routes';
-
-
-import {LoggedInRouterOutlet} from './services/auth-router.service';
 import {AuthGuard} from './auth.guard';
 
 @Component({
@@ -17,11 +12,9 @@ import {AuthGuard} from './auth.guard';
     providers: [
 		AuthService,
 		OpenProjectService,
-		// AuthGuard
 	], //tornando o servico disponivel para os componentes filhos
     directives: [
     	ROUTER_DIRECTIVES,
-		// LoggedInRouterOutlet,
 		OpenProjectComponent,			
     ],
     template: `

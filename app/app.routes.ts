@@ -1,7 +1,7 @@
 import { provideRouter }  from '@angular/router';
 
-import { OpenProjectRoutes, AUTH_PROVIDERS } from './routes/open-project.routes';
-import { AuthenticationComponent } from './components/authentication.component';
+import { OpenProjectRoutes, AUTH_PROVIDERS } from './open-project/routes/open-project.routes';
+import { AuthenticationComponent } from './auth/components/authentication.component';
 
 export const routes = [
 	

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, DoCheck } from '@angular/core';
 import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 
-import { AuthService } from '../services/auth/auth.service';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
 	selector: 'authentication_selector',
@@ -9,8 +9,6 @@ import { AuthService } from '../services/auth/auth.service';
 	// styleUrls: ['app/hero-detail.component.css'],
 	directives: [
     	ROUTER_DIRECTIVES,
-		// LoggedInRouterOutlet,
-		
     ],
 })
 
@@ -27,7 +25,9 @@ export class AuthenticationComponent implements OnInit {
 	setRXJSListeners() {
 
 		this.authService.getLogged(null).subscribe((user: Object) => {
+        	console.log("uepa");
         	this.router.navigate(['/open-project']);
+
      	});
 
 	}
