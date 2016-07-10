@@ -1,8 +1,14 @@
 <h1>{{ title }}</h1>
 
-<div *ngFor="let project of projects"  class="col-1-4">
+<div *ngFor="let project of projects" (click)="getProjectDetail(project.id)" class="col-1-4">
     <div class="module hero">
      	<h4>{{project.title}}</h4>
     </div>
+</div>
+
+<hr>
+
+<div *ngIf="selectedProject">
+	<h2>{{ selectedProject.id }} details!</h2>
 </div>
 

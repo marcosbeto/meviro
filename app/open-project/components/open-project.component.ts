@@ -15,6 +15,7 @@ export class OpenProjectComponent implements  OnInit {
 	title = "OpenProject Begins!"
 
 	projects: OpenProject[];
+	selectedProject: OpenProject;
 
 	constructor(
 		private openProjectService: OpenProjectService,
@@ -47,6 +48,16 @@ export class OpenProjectComponent implements  OnInit {
         	this.router.navigate(['/login']);
      	});
 	}
+
+	getProjectDetail(id: number) { 
+		this.openProjectService.getProjectDetail(id, this.authService.headers)
+			.subscribe(res => { 
+				this.selectedProject = res;
+			}
+		);
+	}
+
+
 
 	
 }
