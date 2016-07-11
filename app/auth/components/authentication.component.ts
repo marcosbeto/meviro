@@ -25,9 +25,7 @@ export class AuthenticationComponent implements OnInit {
 	setRXJSListeners() {
 
 		this.authService.getLogged(null).subscribe((user: Object) => {
-        	console.log("uepa");
         	this.router.navigate(['/open-project']);
-
      	});
 
 	}

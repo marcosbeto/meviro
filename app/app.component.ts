@@ -19,7 +19,6 @@ import {AuthGuard} from './auth.guard';
     ],
     template: `
     	<div class="navbar-header">
-		  <a class="navbar-brand" href="#">Auth0 - Angular 2</a>
 		  <button class="btn btn-primary btn-margin" (click)="auth.login()" *ngIf="!auth.authenticated()">Log In</button>
 		  <button class="btn btn-primary btn-margin" (click)="auth.logout()" *ngIf="auth.authenticated()">Log Out</button>
 		</div>
