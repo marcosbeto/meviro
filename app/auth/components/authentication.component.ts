@@ -17,17 +17,13 @@ export class AuthenticationComponent implements OnInit {
 	constructor(private authService: AuthService, private router: Router) {}
 
 	ngOnInit() {
-					 	
 		this.setRXJSListeners();
-		
 	}
 
 	setRXJSListeners() {
-
 		this.authService.getLogged(null).subscribe((user: Object) => {
         	this.router.navigate(['/open-project']);
      	});
-
 	}
 
 }

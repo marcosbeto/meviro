@@ -3,6 +3,7 @@ import {AuthHttp, tokenNotExpired} from 'angular2-jwt';
 import { Headers, Http } from '@angular/http';
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
+import { Router} from '@angular/router';
 
 declare var Auth0Lock: any;
 
@@ -14,13 +15,16 @@ export class AuthService {
   
   user: Object;
   zone: NgZone;
+  router: Router;
+
   headers = new Headers();
   private subjectLogin: Subject<Object> = new Subject<Object>();
   private subjectLogout: Subject<Object> = new Subject<Object>();
 
-  constructor(private authHttp: AuthHttp, zone: NgZone) {
+  constructor(private authHttp: AuthHttp, zone: NgZone; router: Router) {
     this.zone = zone;
     this.user = JSON.parse(localStorage.getItem('profile'));
+    this.router = router;
     
     if (localStorage.getItem('id_token')) {
       this.createAuthorizationData(localStorage.getItem('id_token'));

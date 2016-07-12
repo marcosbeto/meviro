@@ -1,26 +1,22 @@
 import { Component } from '@angular/core';
-import { Router, ROUTER_DIRECTIVES, CanActivate }    from '@angular/router';
+import { Router, ROUTER_DIRECTIVES }    from '@angular/router';
 
 import { AuthService } from './auth/services/auth.service';
 import { OpenProjectService } from './open-project/services/open-project.service'; 
-import { OpenProjectComponent } from './open-project/components/open-project.component';
-import { APP_ROUTER_PROVIDERS } from './app.routes';
-import {AuthGuard} from './auth.guard';
 
 @Component({
     selector: 'my-app',
-    providers: [
+    providers: [ //Those are the classes that will PROVIDE services for the rest of the app
 		AuthService,
 		OpenProjectService,
-	], //tornando o servico disponivel para os componentes filhos
+	], 
     directives: [
     	ROUTER_DIRECTIVES,
-		OpenProjectComponent,			
     ],
     template: `
     	<div class="navbar-header">
-		  <button class="btn btn-primary btn-margin" (click)="auth.login()" *ngIf="!auth.authenticated()">Log In</button>
-		  <button class="btn btn-primary btn-margin" (click)="auth.logout()" *ngIf="auth.authenticated()">Log Out</button>
+		  <button class="btn btn-primary btn-margin" (click)="authService.login()" *ngIf="!authService.authenticated()">Log In</button>
+		  <button class="btn btn-primary btn-margin" (click)="authService.logout()" *ngIf="authService.authenticated()">Log Out</button>
 		</div>
 		<router-outlet></router-outlet>
 	`
@@ -29,6 +25,14 @@ import {AuthGuard} from './auth.guard';
 
 export class AppComponent { 
 	
-	constructor(private auth: AuthService) {} 
+	constructor(private authService: AuthService, private router:Router) {
+		this.setRXJSListeners();
+	} 
+
+	setRXJSListeners() {
+     	this.authService.getLoggedOut(null).subscribe((user: Object) => {
+       		this.router.navigate(['/login']);
+     	});
+ 	}
 
 }

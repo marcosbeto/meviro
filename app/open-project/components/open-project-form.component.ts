@@ -6,18 +6,10 @@ import { OpenProjectService } from '../services/open-project.service';
 import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
-	templateUrl: 'app/open-project/templates/open-project.component.html',
-	directives: [ROUTER_DIRECTIVES],
- 	providers:  [OpenProjectService]
-	// styleUrls: ['app/hero-detail.component.css'],
+	templateUrl: 'app/open-project/templates/open-project-form.component.html',
 })
 
-export class OpenProjectComponent implements  OnInit {
-
-	title = "Projects HQ"
-
-	projects: OpenProject[];
-	selectedProject: OpenProject;
+export class OpenProjectFormComponent implements OnInit {
 
 	constructor(
 		private openProjectService: OpenProjectService,
@@ -25,4 +17,9 @@ export class OpenProjectComponent implements  OnInit {
 		private authService: AuthService) {
 	}
 
+	ngOnInit() {					 	
+	}
+
+	
+	
 }

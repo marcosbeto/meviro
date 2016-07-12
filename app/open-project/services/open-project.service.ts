@@ -38,16 +38,9 @@ export class OpenProjectService {
 					headers: header
 				})
 				.map((responseData) => {
-					// console.log(responseData.json());
 					return JSON.parse(responseData.json());
 				})
 				.map((project: <OpenProject>) => {
-					// resp = JSON.parse(project.json());
-					// console.log(project);
-					// console.log('project.title');
-					// console.log(resp);
-					// console.log(project[0].fields);
-					// projectObj = new OpenProject(project[0].pk, project[0].fields.title, null, null, null, null, null, null, null)
 					return new OpenProject(project[0].pk, project[0].fields.title, null, null, null, null, null, null, null);
 				});
 	}
