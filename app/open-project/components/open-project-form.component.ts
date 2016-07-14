@@ -11,6 +11,8 @@ import { AuthService } from '../../auth/services/auth.service';
 
 export class OpenProjectFormComponent implements OnInit {
 
+	model = new OpenProject(null, null, null, null, null, null, null, null, null);
+
 	constructor(
 		private openProjectService: OpenProjectService,
 		private router: Router,
@@ -20,6 +22,13 @@ export class OpenProjectFormComponent implements OnInit {
 	ngOnInit() {					 	
 	}
 
+	saveProject() {
+		this.openProjectService.saveProject(this.model, this.authService.headers)
+			.subscribe(res => { 
+				this.model = res;
+			}
+		);
+	}
 	
 	
 }

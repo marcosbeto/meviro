@@ -1,3 +1,17 @@
 <h1>OPEN PROJECT FORM</h1>
+<!-- <form> -->
+  ID: <input type="number" required [(ngModel)]="model.id">
+  <br>
+  Título: <input type="text" required [(ngModel)]="model.title">
+  <br>
+  User ID: <input type="text" required [(ngModel)]="model.user_id">
+
+  <hr>
+
+  
+  <button type="submit" (click)="saveProject()" >Submit</button>
+  
+  <br>
+  {{ model.title }}
 
 

@@ -45,6 +45,21 @@ export class OpenProjectService {
 				});
 	}
 
+	saveProject(projectToSave:OpenProject, header: Headers) {
+	    let body = JSON.stringify({ projectToSave });
+	    header.append('Content-Type', 'application/json');
+		
+		return this.http.post(this.listProjectsUrl + "add/", body, {
+			headers: header
+		})
+		.map((responseData) => {
+			return JSON.parse(responseData.json());
+		})
+		.map((project: <OpenProject>) => {
+			return new OpenProject(project[0].pk, project[0].fields.title, null, null, null, null, null, null, null);
+		});
+	}
+
 	private handleError(error: any) {
 		console.error('An error occurred', error);
 		return Promise.reject(error.message || error);
