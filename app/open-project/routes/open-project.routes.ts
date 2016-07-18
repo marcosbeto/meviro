@@ -13,6 +13,7 @@ export const OpenProjectRoutes = [
 		component: OpenProjectComponent, 
 	  	children: [
 	      { path: 'add',  component: OpenProjectFormComponent, canActivate: [AuthGuard] },
+	      { path: 'update/:id',  component: OpenProjectFormComponent, canActivate: [AuthGuard] },
 	      { path: '',  component: OpenProjectListComponent, canActivate: [AuthGuard]},
 	      // { path: ':id',  component: OpenProjectDetailComponent, canActivate: [AuthGuard]},
 	    ] 

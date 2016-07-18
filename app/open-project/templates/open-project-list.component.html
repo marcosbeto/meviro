@@ -2,7 +2,7 @@
 
 <div *ngFor="let project of projects" (click)="getProjectDetail(project.id)" class="col-1-4">
     <div class="module hero">
-     	<h4>{{project.title}}</h4>
+     	<h4>{{project.title}} - <a>Edit</a> | <a>Delete</a></h4>
     </div>
 </div>
 

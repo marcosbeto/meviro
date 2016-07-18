@@ -68,5 +68,5 @@ export class AuthenticationComponent implements OnInit {
 			});
 		// --- ./Checking if the meta user already exists --- //
 	}
-	
+
 }

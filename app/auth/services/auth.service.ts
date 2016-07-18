@@ -16,6 +16,7 @@ export class AuthService {
   private metaUserUrl = 'http://localhost:8000/meta-users/';  // Web API URL
   
   user: Object;
+  metauser_id:number;
   zone: NgZone;
   router: Router;
   headers = new Headers();
@@ -26,6 +27,9 @@ export class AuthService {
     this.zone = zone;
     this.user = JSON.parse(localStorage.getItem('profile'));
     this.router = router;
+    
+    if (localStorage.getItem('profile.api_user_id'))
+      this.metauser_id = +localStorage.getItem('profile.api_user_id');
     
     if (localStorage.getItem('id_token')) {
       this.createAuthorizationData(localStorage.getItem('id_token'));
@@ -38,8 +42,8 @@ export class AuthService {
 
   public login() {
     // Show the Auth0 Lock widget  
-    this.lock.show({user_metadata: {
-        api_user_id: "12",
+    this.lock.show({authParams: {
+      scope: 'openid email user_metadata '
     }}, (err: string, profile: string, token: string) => {
     
       if (err)
@@ -47,6 +51,15 @@ export class AuthService {
       
       this.user = profile; //Setting the user according to response
       this.createAuthorizationData(token);
+
+      //setting the local storages for the meta user id during login
+      if (this.user.user_metadata) {
+        if(this.user.user_metadata.api_user_id) {
+          this.metauser_id = this.user.user_metadata.api_user_id;
+          localStorage.setItem('profile.api_user_id', this.metauser_id.toString()); 
+        }
+      }
+      
       localStorage.setItem('profile', JSON.stringify(profile)); //Saving user profile to local storage
 
       this.zone.run(() =>  { // Force angular to execute the Change Detection:
@@ -59,6 +72,7 @@ export class AuthService {
         
     this.deleteAuthorizationData();
     localStorage.removeItem('profile');
+    localStorage.removeItem('profile.api_user_id');
 
     this.zone.run(() => {
         this.user = null;
@@ -102,6 +116,9 @@ export class AuthService {
         "api_user_id": api_user_id        
       }
     }   
+
+    this.metauser_id = api_user_id;
+    localStorage.setItem('profile.api_user_id', this.metauser_id.toString()); 
 
     headerMetadata.append('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ2aGFWV0ZRZmJJRVc5TWxiR1JVZUwxVWdrcTZLbHhRTSIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbInVwZGF0ZSJdfX0sImlhdCI6MTQ2ODQ1NjE1MSwianRpIjoiZDU0ZmVjOWQ5MTg1ZWRhMzUxYzk5NjE0NjY4NWRhMDEifQ.IiO1qZyAy4KqCmqaPyhoaWHiPBqwT3DcHrU2OMiQz4A');
     headerMetadata.append('Content-Type', 'application/json');

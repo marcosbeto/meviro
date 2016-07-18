@@ -46,17 +46,19 @@ export class OpenProjectService {
 	}
 
 	saveProject(projectToSave:OpenProject, header: Headers) {
-	    let body = JSON.stringify({ projectToSave });
+
+	    let body = JSON.stringify(projectToSave);
+
 	    header.append('Content-Type', 'application/json');
-		
+
 		return this.http.post(this.listProjectsUrl + "add/", body, {
 			headers: header
 		})
 		.map((responseData) => {
-			return JSON.parse(responseData.json());
+			return responseData.json();
 		})
 		.map((project: <OpenProject>) => {
-			return new OpenProject(project[0].pk, project[0].fields.title, null, null, null, null, null, null, null);
+			return new OpenProject(project.id, project.title, null, null, null, null, null, null, null);
 		});
 	}
 
