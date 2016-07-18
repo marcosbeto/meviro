@@ -51,9 +51,9 @@ export class AuthenticationComponent implements OnInit {
 							// --- Add Metadata to Auth0 User --- //	
 								this.authService.updataUserMetadata(metaUserIdResult, this.authService.user)
 									.subscribe(
-										// updataUserMetadataResult => { 
-										// 	console.log("metadata updated");
-										// }
+										updataUserMetadataResult => { 
+											// console.log("metadata updated");
+										}
 									);
 							// --- ./Add Metadata to Auth0 User --- //		
 						},

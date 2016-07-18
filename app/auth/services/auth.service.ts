@@ -82,6 +82,8 @@ export class AuthService {
 
   public isRegistered(user: any) {
 
+    
+
     let body = {"email":user.email};
 
     return this.http.post(this.metaUserUrl, body, {
@@ -131,10 +133,7 @@ export class AuthService {
   }
 
   public createAuthorizationData(token: string) {
-
-    if (!localStorage.getItem('id_token'))
-      localStorage.setItem('id_token', token);
-    
+    localStorage.setItem('id_token', token);
     this.headers.append('Authorization', 'JWT ' + token);
   }
 
