@@ -2,7 +2,7 @@ export class OpenProject {
 	constructor (
 		public id: number,
 		public title: string,
-		public metauser_id_id?: number,
+		public metauser_id?: number,
 		public date_added?: string,
 		public steps?: string[],
 		public tags?: string[],

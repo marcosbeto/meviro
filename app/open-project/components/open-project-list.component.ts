@@ -7,6 +7,9 @@ import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
 	templateUrl: 'app/open-project/templates/open-project-list.component.html',
+	directives: [
+        ROUTER_DIRECTIVES
+    ]
 	
 })
 
@@ -24,9 +27,7 @@ export class OpenProjectListComponent implements  OnInit {
 	}
 
 	ngOnInit() {					 	
-		if (this.authService.authenticated()) 
-			this.getProjects();
-		
+		this.getProjects();
 		this.setRXJSListeners();		
 	}
 
@@ -47,14 +48,5 @@ export class OpenProjectListComponent implements  OnInit {
         	this.projects = null;
      	});
  	}
-
-	getProjectDetail(id: number) { 
-		this.openProjectService.getProjectDetail(id, this.authService.headers)
-			.subscribe(res => { 
-				this.selectedProject = res;
-			}
-		);
-	}
-
 	
 }

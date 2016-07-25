@@ -2,13 +2,20 @@
 <!-- <form> -->
   Título: <input type="text" required [(ngModel)]="model.title">
   <br>
-
   <hr>
 
-  
   <button type="submit" (click)="saveProject()" >Submit</button>
   
   <br>
-  {{ model.title }}
+
+<div *ngIf="model.id">
+  <list-steps></list-steps>
+</div>
+
+<div *ngIf="model.id">
+  <new-step></new-step>
+</div>
+
+
 
 

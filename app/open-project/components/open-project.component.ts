@@ -3,18 +3,21 @@ import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 
 import { OpenProject } from '../models/open-project.model';
 import { OpenProjectService } from '../services/open-project.service';
+import { StepComponent } from '../steps/components/step.component';
 import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
 	templateUrl: 'app/open-project/templates/open-project.component.html',
-	directives: [ROUTER_DIRECTIVES],
+	directives: [
+		ROUTER_DIRECTIVES,
+	],
  	providers:  [OpenProjectService]
 	// styleUrls: ['app/hero-detail.component.css'],
 })
 
-export class OpenProjectComponent implements  OnInit {
+export class OpenProjectComponent {
 
-	title = "Projects HQ"
+	title = "Projects HQ";
 
 	projects: OpenProject[];
 	selectedProject: OpenProject;

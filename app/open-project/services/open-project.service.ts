@@ -9,6 +9,8 @@ import { OpenProject } from '../models/open-project.model';
 export class OpenProjectService {
 
 	private listProjectsUrl = 'http://localhost:8000/projects/';  // URL to web api
+	private updateProjectUrl = 'http://localhost:8000/projects/update/';  // URL to web api
+	private deleteProjectUrl = 'http://localhost:8000/projects/delete/';  // URL to web api
 
 	constructor(private http: Http) {}
 
@@ -34,6 +36,7 @@ export class OpenProjectService {
 	}
 
 	getProjectDetail(projectID: number, header: Headers) {
+
 		return this.http.get(this.listProjectsUrl + projectID + "/", {
 					headers: header
 				})
@@ -49,7 +52,33 @@ export class OpenProjectService {
 
 	    let body = JSON.stringify(projectToSave);
 
+		console.log("---->");
+	    console.log(body);
+
 	    header.append('Content-Type', 'application/json');
+
+	    if (projectToSave.id!=null) { //update
+
+	    	return this.http.put(this.updateProjectUrl + projectToSave.id + "/",
+	    		body, {
+					headers: header
+				})
+				.map((responseData) => {
+					console.log('responseData');
+					console.log(responseData);
+					return responseData.json();
+				})
+				.map((project: <OpenProject>) => {
+					console.log('project');
+					console.log(project);
+					return new OpenProject(project.id, project.title, null, null, null, null, null, null, null);
+				});
+
+
+	    }
+
+	    console.log("bocyzera");
+	    console.log(body);
 
 		return this.http.post(this.listProjectsUrl + "add/", body, {
 			headers: header
@@ -60,6 +89,16 @@ export class OpenProjectService {
 		.map((project: <OpenProject>) => {
 			return new OpenProject(project.id, project.title, null, null, null, null, null, null, null);
 		});
+	}
+
+	deleteProject(projectID: number, header: Headers) {
+		return this.http.delete(this.listProjectsUrl + projectID + "/", {
+				headers: header
+			})
+			.map((responseData) => {
+				console.log(responseData);
+				return responseData;
+			});
 	}
 
 	private handleError(error: any) {

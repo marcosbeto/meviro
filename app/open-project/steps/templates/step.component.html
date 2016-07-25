@@ -1,0 +1,10 @@
+<h1>{{ title }}</h1>
+
+
+<div *ngFor="let step of steps"  class="col-1-4">
+    <div>
+     	Titulo Passo: <b>{{step.title}}</b> - {{step.project}}
+    </div>
+</div>
+
+<!-- Passo Título: <input type="text" required [(ngModel)]="model.title"> -->
