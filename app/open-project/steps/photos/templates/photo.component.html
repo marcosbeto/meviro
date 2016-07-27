@@ -1,0 +1,16 @@
+<h1>{{ title }}</h1>
+
+
+<div *ngFor="let photo of photos"  class="col-1-4">
+    <div>
+     	FOTO URL: <b>{{photo.original_url}}</b> - {{photo.step}} 
+     	<!-- <a routerLink="/open-project/update/{{step.project}}/step/update/{{step.id}}/">Edit</a>  -->| <a routerLink="/open-project/project/{{project_id}}/step/{{photo.step}}/photo/delete/{{photo.id}}/">Delete</a> 
+    </div>
+</div>
+
+<new-photo [stepId]="step_id" [photos_parent]="photos" [photosArray]="photos" (photosListChange)="addNewPhotoToArray_Listener($event);">
+	
+</new-photo>
+
+
+<!-- Passo Título: <input type="text" required [(ngModel)]="model.title"> -->

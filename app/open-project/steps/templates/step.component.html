@@ -3,8 +3,13 @@
 
 <div *ngFor="let step of steps"  class="col-1-4">
     <div>
-     	Titulo Passo: <b>{{step.title}}</b> - {{step.project}}
+     	Titulo Passo: <b>{{step.title}}</b> - {{step.project}} <a routerLink="/open-project/update/{{step.project}}/step/update/{{step.id}}/">Edit</a> | <a routerLink="/open-project/update/{{step.project}}/step/delete/{{step.id}}/">Delete</a> 
     </div>
 </div>
+
+<new-step [projectId]="project_id" [steps_parent]="steps" [stepsArray]="steps" (stepsListChange)="addNewStepToArray_Listener($event);">
+	
+</new-step>
+
 
 <!-- Passo Título: <input type="text" required [(ngModel)]="model.title"> -->

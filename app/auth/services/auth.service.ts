@@ -53,9 +53,9 @@ export class AuthService {
       this.createAuthorizationData(token);
 
       //setting the local storages for the meta user id during login
-      if (this.user.user_metadata) {
-        if(this.user.user_metadata.api_user_id) {
-          this.metauser_id = this.user.user_metadata.api_user_id;
+      if (this.user['user_metadata']) {
+        if(this.user['user_metadata']['api_user_id']) {
+          this.metauser_id = this.user['user_metadata']['api_user_id'];
           localStorage.setItem('profile.api_user_id', this.metauser_id.toString()); 
         }
       }
@@ -81,10 +81,12 @@ export class AuthService {
   }
 
   public isRegistered(user: any) {
-
-    
+  
 
     let body = {"email":user.email};
+
+    console.log('HEADERS:');
+    console.log(this.headers);
 
     return this.http.post(this.metaUserUrl, body, {
       headers: this.headers

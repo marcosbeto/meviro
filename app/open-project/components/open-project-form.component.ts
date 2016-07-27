@@ -6,21 +6,22 @@ import { OpenProject } from '../models/open-project.model';
 import { OpenProjectService } from '../services/open-project.service';
 import { StepComponent } from '../steps/components/step.component';
 import { StepFormComponent } from '../steps/components/step-form.component'
-import { StepService } from '../steps/services/step.service';;
+import { StepService } from '../steps/services/step.service';
+import { PhotoService } from '../steps/photos/services/photo.service';
 
 
 @Component({
 	templateUrl: 'app/open-project/templates/open-project-form.component.html',
 	directives: [
 		StepComponent,
-		StepFormComponent
 	],
-	providers:  [StepService]
+	providers:  [StepService, PhotoService]
 })
 
 export class OpenProjectFormComponent implements OnInit {
 
-	model: OpenProject;
+	public project_id: number;
+	model: OpenProject;	
 
 	constructor(
 		private openProjectService: OpenProjectService,
@@ -29,24 +30,21 @@ export class OpenProjectFormComponent implements OnInit {
 		private _routeParams:ActivatedRoute,
 		private stepService: StepService) {
 
-		this.model = new OpenProject(null, null, this.authService.metauser_id, null, null, null, null, null, null);
-
-
+		this.model = new OpenProject(null, null, null, null, null, this.authService.metauser_id); //starting a new model that will be populated by a specific user
 	}
 
 	ngOnInit() {	
 
-		let action = this._routeParams.url._value[0].path;
-		
+		let action = this._routeParams.url['_value'][0]['path']; //extracting from the URL the action that will be executed
+
 		this._routeParams.params.subscribe(params => {
-	      let id = Number.parseInt(params['id']);
-	      if (id) {
+	      let id = Number.parseInt(params['id']); //getting the id of the project 
+	      if (id) { //if an `id` is presented at the URL 
 	      	if (action=="delete")
 	      		this.deleteProject(id);
 	      	else
 	      		this.getProjectDetail(id);
 	      }
-	      	
 	    });
 
 	}
@@ -55,6 +53,7 @@ export class OpenProjectFormComponent implements OnInit {
 		this.openProjectService.saveProject(this.model, this.authService.headers)
 			.subscribe(result => { 
 				this.model = result;
+				this.project_id = this.model.id;
 			}
 		);
 	}
@@ -63,7 +62,7 @@ export class OpenProjectFormComponent implements OnInit {
 		this.openProjectService.getProjectDetail(id, this.authService.headers)
 			.subscribe(result => { 
 				this.model = result;
-				console.log(this.model);
+				this.project_id = this.model.id;
 			}
 		);
 	}

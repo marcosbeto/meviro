@@ -4,34 +4,45 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map'
 
 import { OpenProject } from '../models/open-project.model';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Injectable()
 export class OpenProjectService {
 
-	private listProjectsUrl = 'http://localhost:8000/projects/';  // URL to web api
-	private updateProjectUrl = 'http://localhost:8000/projects/update/';  // URL to web api
-	private deleteProjectUrl = 'http://localhost:8000/projects/delete/';  // URL to web api
+	baseUrl: string;
+	listProjectsUrl: string;
+	updateProjectUrl: string;
+	deleteProjectUrl: string;
 
-	constructor(private http: Http) {}
+	constructor(private http: Http, private authService: AuthService) {
+		this.setApiUrls();
+	}
+
+	setApiUrls() {
+		this.baseUrl = "http://localhost:8000/dashboard/" + localStorage.getItem('profile.api_user_id') + "/";
+		this.listProjectsUrl = this.baseUrl + "projects/";
+		this.updateProjectUrl = this.listProjectsUrl + "update/";
+		this.deleteProjectUrl = this.listProjectsUrl + "delete/";
+	}
 
 	getProjects(header: Headers){
-			
+
 		return this.http.get(this.listProjectsUrl, {
 					headers: header
 				})
 				.map((responseData) => {
-					return JSON.parse(responseData.json());
-				})
-				.map((projects: Array<any>) => {
-					let result: Array<OpenProject> = [];
+					let projects = JSON.parse(responseData.json());				
+					let allProjects: Array<OpenProject> = [];					
+					
 					if (projects) {						
-						projects.forEach((project) => {						
-							result.push(
-								new OpenProject(project.pk, project.fields.title, null, null, null, null, null, null, null)
+						projects.forEach((project:any) => {						
+							allProjects.push(
+								new OpenProject(project.pk, project.fields.title, null, null, null, null)
 							);
 						});
 					}
-					return result;
+					return allProjects;
+
 				});
 	}
 
@@ -41,19 +52,14 @@ export class OpenProjectService {
 					headers: header
 				})
 				.map((responseData) => {
-					return JSON.parse(responseData.json());
-				})
-				.map((project: <OpenProject>) => {
-					return new OpenProject(project[0].pk, project[0].fields.title, null, null, null, null, null, null, null);
+					let project = JSON.parse(responseData.json());				
+					return new OpenProject(project[0].pk, project[0].fields.title, null, null, null, project[0].fields.metauser_id);
 				});
 	}
 
 	saveProject(projectToSave:OpenProject, header: Headers) {
 
 	    let body = JSON.stringify(projectToSave);
-
-		console.log("---->");
-	    console.log(body);
 
 	    header.append('Content-Type', 'application/json');
 
@@ -64,30 +70,21 @@ export class OpenProjectService {
 					headers: header
 				})
 				.map((responseData) => {
-					console.log('responseData');
-					console.log(responseData);
-					return responseData.json();
-				})
-				.map((project: <OpenProject>) => {
-					console.log('project');
-					console.log(project);
-					return new OpenProject(project.id, project.title, null, null, null, null, null, null, null);
+					let project = responseData.json();
+					header.delete('Content-Type');
+					return new OpenProject(project.id, project.title, null, null, null, null);
 				});
 
 
 	    }
 
-	    console.log("bocyzera");
-	    console.log(body);
-
 		return this.http.post(this.listProjectsUrl + "add/", body, {
 			headers: header
 		})
 		.map((responseData) => {
-			return responseData.json();
-		})
-		.map((project: <OpenProject>) => {
-			return new OpenProject(project.id, project.title, null, null, null, null, null, null, null);
+			let project = responseData.json();
+			header.delete('Content-Type');
+			return new OpenProject(project.id, project.title, null, null, null, null);
 		});
 	}
 
@@ -96,7 +93,6 @@ export class OpenProjectService {
 				headers: header
 			})
 			.map((responseData) => {
-				console.log(responseData);
 				return responseData;
 			});
 	}

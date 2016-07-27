@@ -1,9 +1,11 @@
-<h1>STEP FORM</h1>
+  <h1>STEP FORM</h1>
 <!-- <form> -->
   Passote: <input type="text" required [(ngModel)]="model.title">
-  <br>
-  FK: <input type="text" required [(ngModel)]="model.project">
-  
-  <button type="submit" (click)="saveStep()" >Submit</button>
+  <input type="text" required [(ngModel)]="model.project" style="visibility:hidden;">
+  <button type="submit" (click)="saveStep(model.project)" >Submit</button>
+
+<div *ngIf="model.id">
+  <list-photos [projectId]="model.project" [stepId]="step_id"></list-photos>
+</div>
 
 

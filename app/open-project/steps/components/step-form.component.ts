@@ -5,75 +5,99 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { Step } from '../models/step.model';
 import { OpenProject } from '../../models/open-project.model';
 import { StepService } from '../services/step.service';
+import { PhotoService } from '../photos/services/photo.service';
+import { PhotoComponent } from '../photos/components/photo.component';
 
 @Component({
 	selector: 'new-step',
 	templateUrl: 'app/open-project/steps/templates/step-form.component.html',
+	directives: [
+		PhotoComponent
+	],
+	providers: [PhotoService]
 })
 
 export class StepFormComponent implements OnInit {
 
+	@Input() stepsArray: Step[];
+	@Output() stepsListChange = new EventEmitter();
+	@Input() projectId: number;
+
+	public step_id: number;
+
 	model: Step;
+	public project_id: string;
 
 	constructor(
 		private stepService: StepService,
 		private router: Router,
 		private authService: AuthService, 
-		private _routeParams:ActivatedRoute) {
+		private _routeParams:ActivatedRoute
+		) {
 
 		this.model = new Step(null, null, null, null);
-
-
 	}
 
 	ngOnInit() {	
-
-		// let project_id = this._routeParams.url._value[1].path;
-		// console.log('project_id');
-		// console.log(project_id);
 		
-		// this.model = new Step(null, null, null, parseInt(project_id, 10));
+		if (this.projectId)
+			this.model = new Step(null, null, null, this.projectId);
 
-		// this._routeParams.params.subscribe(params => {
-	 //      let id = Number.parseInt(params['id']);
-	 //      if (id) {
-	 //      	if (action=="delete")
-	 //      		this.deleteProject(id);
-	 //      	else
-	 //      		this.getProjectDetail(id);
-	 //      }
+		this._routeParams.params.subscribe(params => {
+	      let step_id = Number.parseInt(params['step_id']); //getting the id of the project 
+
+	      if (step_id && this._routeParams.url['_value'][1] && this._routeParams.url['_value'][3]) { //if an `id` is presented at the URL 
+	      
+      		let action = this._routeParams.url['_value'][3].path;
+      		let project_id = this._routeParams.url['_value'][1].path;
+
+	      	if (action=="delete") 
+	      		this.deleteStep(project_id, step_id);
+	      	else 
+	      		this.getStepDetail(project_id, step_id);
 	      	
-	 //    });
-
+	      }
+	    });
+		
 	}
 
-	saveStep() {
-		console.log(this.model);
-		this.stepService.saveStep(this.model, this.authService.headers)
+	saveStep(project_id:number) {
+
+		let updating = false;
+		if (this.model.id)
+			updating = true;
+
+		this.stepService.saveStep(project_id, this.model, this.authService.headers)
 			.subscribe(result => { 
 				this.model = result;
+				this.step_id = this.model.id;
+				this.stepsListChange.emit({
+			      step: this.model
+			    });
+			    if (!updating)
+					this.model = new Step(null, null, null, this.projectId); //reseting step form
 			}
 		);
 	}
 
-	// getProjectDetail(id: number) { 
-	// 	this.openProjectService.getProjectDetail(id, this.authService.headers)
-	// 		.subscribe(result => { 
-	// 			this.model = result;
-	// 			console.log(this.model);
-	// 		}
-	// 	);
-	// }
+	getStepDetail(project_id:number, step_id: number) { 
+		this.stepService.getStepDetail(project_id, step_id, this.authService.headers)
+			.subscribe(result => { 
+				this.model = result;
+				this.step_id = this.model.id;
+			}
+		);
+	}
 
-	// deleteProject(id: number) {
-	// 	this.openProjectService.deleteProject(id, this.authService.headers)
-	// 		.subscribe(result => { 
-	// 			console.log("apagado");
-	// 			this.router.navigate(['/open-project']);
-				
-	// 		}
-	// 	);
-	// }
+	deleteStep(project_id:number, step_id: number) {
+
+		this.stepService.deleteStep(project_id, step_id, this.authService.headers)
+			.subscribe(result => { 
+				console.log("apagado");
+				this.router.navigate(['/open-project/update/' + project_id + '/']);				
+			}
+		);
+	}
 	
 	
 }

@@ -4,14 +4,23 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map'
 
 import { Step } from '../models/step.model';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Injectable()
 export class StepService {
 
-	private listProjectsUrl = 'http://localhost:8000/projects/';  // URL to web api
-	private saveStepUrl = 'http://localhost:8000/steps/';  // URL to web api
+	baseUrl: string;
+	listProjectsUrl: string;
+	saveStepUrl: string;
 	
-	constructor(private http: Http) {}
+	constructor(private http: Http, private authService:AuthService) {
+		this.setApiUrls();		
+	}
+
+	setApiUrls() {
+		this.baseUrl = "http://localhost:8000/dashboard/" + localStorage.getItem('profile.api_user_id') + "/";
+		this.listProjectsUrl = this.baseUrl + "projects/";
+	}
 
 	getSteps(projectID:number, header: Headers){
 			
@@ -19,13 +28,10 @@ export class StepService {
 					headers: header
 				})
 				.map((responseData) => {
-					return JSON.parse(responseData.json());
-				})
-				.map((steps: Array<any>) => {
+					let steps = JSON.parse(responseData.json());
 					let result: Array<Step> = [];
 					if (steps) {			
-						steps.forEach((step) => {						
-							console.log(step);
+						steps.forEach((step:any) => {						
 							result.push(
 								new Step(step.pk, step.fields.position, step.fields.title, step.fields.project)
 							);
@@ -35,71 +41,55 @@ export class StepService {
 				});
 	}
 
-	saveStep(stepToSave:Step, header: Headers) {
+	saveStep(projectID:number, stepToSave:Step, header: Headers) {
 
 	    let body = JSON.stringify(stepToSave);
 
 	    header.append('Content-Type', 'application/json');
 
 	    if (stepToSave.id!=null) { //update
-
-	    	return this.http.put(this.saveStepUrl + stepToSave.id + "/",
+	    	return this.http.put(this.listProjectsUrl + projectID + "/steps/update/" + stepToSave.id + "/" ,
 	    		body, {
 					headers: header
 				})
 				.map((responseData) => {
-					console.log('responseData');
-					console.log(responseData);
-					return responseData.json();
-				})
-				.map((step: <Step>) => {
-					console.log('step');
-					console.log(step);
-					// return new Step(step.pk, null, step.title, null)
+					let step = responseData.json();
+					header.delete('Content-Type');
+					return new Step(step.pk, null, step.title, step.project)
 				});
 
 
 	    }
 
-		return this.http.post(this.saveStepUrl + "add/", body, {
-			headers: header
-		})
-		.map((responseData) => {
-			return responseData.json();
-		})
-		.map((step: <Step>) => {
-			console.log("stepeta");
-			console.log(step);
-			// return new Step(step.id, null, step.title, null);
-		});
+		return this.http.post(this.listProjectsUrl + stepToSave.project + "/steps/add/", 
+			body, {
+				headers: header
+			})
+			.map((responseData) => {
+				let step = responseData.json();
+				header.delete('Content-Type');
+				return new Step(step.id, null, step.title, step.project);
+			});
 	}
 
+	getStepDetail(projectID: number, stepID:number, header: Headers) {
+		return this.http.get(this.baseUrl + "steps/" + stepID + "/", {
+					headers: header
+				})
+				.map((responseData) => {
+					let step = JSON.parse(responseData.json());
+					return new Step(step[0].pk, null, step[0].fields.title, step[0].fields.project);
+				});
+	}
 
-
-	// getStepDetail(projectID: number, header: Headers) {
-
-	// 	return this.http.get(this.listProjectsUrl + projectID + "/", {
-	// 				headers: header
-	// 			})
-	// 			.map((responseData) => {
-	// 				return JSON.parse(responseData.json());
-	// 			})
-	// 			.map((project: <OpenProject>) => {
-	// 				return new OpenProject(project[0].pk, project[0].fields.title, null, null, null, null, null, null, null);
-	// 			});
-	// }
-
-	
-
-	// deleteProject(projectID: number, header: Headers) {
-	// 	return this.http.delete(this.listProjectsUrl + projectID + "/", {
-	// 			headers: header
-	// 		})
-	// 		.map((responseData) => {
-	// 			console.log(responseData);
-	// 			return responseData;
-	// 		});
-	// }
+	deleteStep(projectID: number, stepID:number, header: Headers) {
+		return this.http.delete(this.listProjectsUrl + projectID + "/steps/delete/" + stepID + "/" , {
+				headers: header
+			})
+			.map((responseData) => {
+				return responseData;
+			});
+	}
 
 	private handleError(error: any) {
 		console.error('An error occurred', error);
