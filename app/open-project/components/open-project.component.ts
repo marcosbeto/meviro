@@ -26,6 +26,7 @@ export class OpenProjectComponent {
 		private openProjectService: OpenProjectService,
 		private router: Router,
 		private authService: AuthService) {
+		
 	}
 
 }

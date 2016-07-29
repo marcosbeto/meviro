@@ -5,6 +5,9 @@ export class OpenProject {
 		public author?: string,
 		public date?: string,
 		public last_update_date?: string,
+		public category?: string,
+		public difficulty?: string,
+		public tags?: string,
 		public metauser_id?: number
 	) { }
 }

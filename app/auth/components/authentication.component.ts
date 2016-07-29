@@ -17,6 +17,7 @@ export class AuthenticationComponent implements OnInit {
 	constructor(private authService: AuthService, private router: Router) {}
 
 	getLoggedVar: any;
+	getLoggedOutVar: any;
 	errorMessage: any;
 
 	ngOnInit() {
@@ -24,49 +25,57 @@ export class AuthenticationComponent implements OnInit {
 	}
 
 	ngOnDestroy() {
+
 		this.getLoggedVar.unsubscribe();
+		this.getLoggedOutVar.unsubscribe();
 	}
 
 	setRXJSListeners() {
 		// --- Listening for login action --- //
 		this.getLoggedVar = this.authService.getLogged(null)
 								.subscribe((user: Object) => {        	
-						           	this.addNewUser();
-						        	this.router.navigate(['/open-project']);
+						           	// --- Checking if the meta user already exists --- //
+									this.authService.isRegistered(this.authService.user)
+										.subscribe(isRegisteredResult => { 
+											if (!isRegisteredResult) {
+												this.addNewUser();	
+											} else {
+												this.router.navigate(['/open-project']);
+											}
+										},
+										error =>  {
+											this.errorMessage = <any>error;
+									});
 						     	}, 
+						     		// --- ./Checking if the meta user already exists --- //
 						     	error =>  {
 									this.errorMessage = <any>error;
 								});
-		// --- ./istening for login action --- //     	
+		// --- ./Listening for login action --- // 
+
+		this.getLoggedOutVar = this.authService.getLoggedOut(null)
+								.subscribe(result => {
+									this.router.navigate(['/login']);
+								});
 	}
 
 	addNewUser() {
-		// --- Checking if the meta user already exists --- //
-       	this.authService.isRegistered(this.authService.user)
-			.subscribe(isRegisteredResult => { 
-				if (!isRegisteredResult) {
-					// --- Saving New Meta User --- //
-					this.authService.saveMetaUser(this.authService.user)
-						.subscribe(metaUserIdResult => { 
-							// --- Add Metadata to Auth0 User --- //	
-								this.authService.updataUserMetadata(metaUserIdResult, this.authService.user)
-									.subscribe(
-										updataUserMetadataResult => { 
-											// console.log("metadata updated");
-										}
-									);
-							// --- ./Add Metadata to Auth0 User --- //		
-						},
-						error =>  {
-							this.errorMessage = <any>error;
-						});
-					// --- ./Saving New Meta User --- //
-				}
+		// --- Saving New Meta User --- //
+		this.authService.saveMetaUser(this.authService.user)
+			.subscribe(metaUserIdResult => { 
+				// --- Add Metadata to Auth0 User --- //	
+					this.authService.updataUserMetadata(metaUserIdResult, this.authService.user)
+						.subscribe(
+							updataUserMetadataResult => { 
+								this.router.navigate(['/open-project']);
+							}
+						);
+				// --- ./Add Metadata to Auth0 User --- //		
 			},
 			error =>  {
 				this.errorMessage = <any>error;
 			});
-		// --- ./Checking if the meta user already exists --- //
+		// --- ./Saving New Meta User --- //
 	}
 
 }

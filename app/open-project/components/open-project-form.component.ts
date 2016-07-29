@@ -28,9 +28,10 @@ export class OpenProjectFormComponent implements OnInit {
 		private router: Router,
 		private authService: AuthService, 
 		private _routeParams:ActivatedRoute,
-		private stepService: StepService) {
-
-		this.model = new OpenProject(null, null, null, null, null, this.authService.metauser_id); //starting a new model that will be populated by a specific user
+		private stepService: StepService
+		) {
+		//starting a new model that will be populated by a specific user
+		this.model = new OpenProject(null, null, null, null, null, null, null, null, localStorage.getItem('profile.api_user_id')); 
 	}
 
 	ngOnInit() {	

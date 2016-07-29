@@ -33,7 +33,7 @@ export class StepService {
 					if (steps) {			
 						steps.forEach((step:any) => {						
 							result.push(
-								new Step(step.pk, step.fields.position, step.fields.title, step.fields.project)
+								new Step(step.pk, step.fields.position, step.fields.title, step.fields.content, step.fields.project)
 							);
 						});
 					}
@@ -48,7 +48,7 @@ export class StepService {
 	    header.append('Content-Type', 'application/json');
 
 	    if (stepToSave.id!=null) { //update
-	    	return this.http.put(this.listProjectsUrl + projectID + "/steps/update/" + stepToSave.id + "/" ,
+	    	return this.http.put(this.baseUrl + "steps/update/" + stepToSave.id + "/" ,
 	    		body, {
 					headers: header
 				})
@@ -68,7 +68,7 @@ export class StepService {
 			.map((responseData) => {
 				let step = responseData.json();
 				header.delete('Content-Type');
-				return new Step(step.id, null, step.title, step.project);
+				return new Step(step.id, null, step.title, step.content, step.project);
 			});
 	}
 
@@ -78,12 +78,12 @@ export class StepService {
 				})
 				.map((responseData) => {
 					let step = JSON.parse(responseData.json());
-					return new Step(step[0].pk, null, step[0].fields.title, step[0].fields.project);
+					return new Step(step[0].pk, null, step[0].fields.title, step[0].fields.content, step[0].fields.project);
 				});
 	}
 
 	deleteStep(projectID: number, stepID:number, header: Headers) {
-		return this.http.delete(this.listProjectsUrl + projectID + "/steps/delete/" + stepID + "/" , {
+		return this.http.delete(this.baseUrl + "steps/delete/" + stepID + "/" , {
 				headers: header
 			})
 			.map((responseData) => {

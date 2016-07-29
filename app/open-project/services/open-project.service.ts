@@ -26,7 +26,6 @@ export class OpenProjectService {
 	}
 
 	getProjects(header: Headers){
-
 		return this.http.get(this.listProjectsUrl, {
 					headers: header
 				})
@@ -37,7 +36,17 @@ export class OpenProjectService {
 					if (projects) {						
 						projects.forEach((project:any) => {						
 							allProjects.push(
-								new OpenProject(project.pk, project.fields.title, null, null, null, null)
+								new OpenProject(
+									project.pk, 
+									project.fields.title, 
+									project.fields.author, 
+									project.fields.date, 
+									project.fields.last_update_date, 
+									project.fields.category, 
+									project.fields.difficulty, 
+									project.fields.tags, 
+									project.fields.metauser_id
+								)
 							);
 						});
 					}
@@ -53,7 +62,17 @@ export class OpenProjectService {
 				})
 				.map((responseData) => {
 					let project = JSON.parse(responseData.json());				
-					return new OpenProject(project[0].pk, project[0].fields.title, null, null, null, project[0].fields.metauser_id);
+					return new OpenProject(
+						project[0].pk, 
+						project[0].fields.title, 
+						project[0].fields.author, 
+						project[0].fields.date, 
+						project[0].fields.last_update_date, 
+						project[0].fields.category, 
+						project[0].fields.difficulty, 
+						project[0].fields.tags, 
+						project[0].fields.metauser_id
+					);
 				});
 	}
 
@@ -64,7 +83,7 @@ export class OpenProjectService {
 	    header.append('Content-Type', 'application/json');
 
 	    if (projectToSave.id!=null) { //update
-
+	    	console.log(body);
 	    	return this.http.put(this.updateProjectUrl + projectToSave.id + "/",
 	    		body, {
 					headers: header
@@ -72,7 +91,17 @@ export class OpenProjectService {
 				.map((responseData) => {
 					let project = responseData.json();
 					header.delete('Content-Type');
-					return new OpenProject(project.id, project.title, null, null, null, null);
+					return new OpenProject(
+									project.id, 
+									project.title, 
+									project.author, 
+									project.date, 
+									project.last_update_date, 
+									project.category, 
+									project.difficulty, 
+									project.tags, 
+									project.metauser_id
+								)
 				});
 
 
@@ -84,7 +113,17 @@ export class OpenProjectService {
 		.map((responseData) => {
 			let project = responseData.json();
 			header.delete('Content-Type');
-			return new OpenProject(project.id, project.title, null, null, null, null);
+			return new OpenProject(
+							project.id, 
+							project.title, 
+							project.author, 
+							project.date, 
+							project.last_update_date, 
+							project.category, 
+							project.difficulty, 
+							project.tags, 
+							project.metauser_id
+						);
 		});
 	}
 

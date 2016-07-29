@@ -33,7 +33,15 @@ export class PhotoService {
 					if (photos) {			
 						photos.forEach((photo:any) => {						
 							result.push(
-								new Photo(photo.pk, photo.fields.original_url, null, null, null, null, photo.fields.step)
+								new Photo(
+									photo.pk,
+									photo.fields.original_url,
+									photo.fields.medium_url,
+									photo.fields.thumbnail_url,
+									photo.fields.original_width,
+									photo.fields.original_height,
+									photo.fields.step
+								)
 							);
 						});
 					}
@@ -55,7 +63,15 @@ export class PhotoService {
 				.map((responseData) => {
 					let photo = responseData.json();
 					header.delete('Content-Type');
-					return new Photo(photo.pk, photo.original_url, null, null, null, null, photo.step);
+					return new Photo(
+							photo.pk,
+							photo.original_url,
+							photo.medium_url,
+							photo.thumbnail_url,
+							photo.original_width,
+							photo.original_height,
+							photo.step
+						);
 				});
 
 
@@ -68,7 +84,15 @@ export class PhotoService {
 			.map((responseData) => {
 				let photo = responseData.json();
 				header.delete('Content-Type');
-				return new Photo(photo.id, photo.original_url, null, null, null, null, photo.step);
+				return new Photo(
+						photo.id, 
+						photo.original_url,
+						photo.medium_url,
+						photo.thumbnail_url,
+						photo.original_width,
+						photo.original_height,
+						photo.step
+					);
 			});
 	}
 
@@ -79,12 +103,20 @@ export class PhotoService {
 				})
 				.map((responseData) => {
 					let photo = JSON.parse(responseData.json());
-					return new Photo(photo[0].pk, photo[0].fields.original_url, null, null, null, null, photo[0].fields.step);
+					return new Photo(
+							photo[0].pk, 
+							photo[0].fields.original_url,
+							photo[0].fields.medium_url,
+							photo[0].fields.thumbnail_url,
+							photo[0].fields.original_width,
+							photo[0].fields.original_height,
+							photo[0].fields.step
+						);
 				});
 	}
 
 	deletePhoto(step_id: number, photo_id: number, header: Headers) {
-		return this.http.delete(this.listPhotosUrl + step_id + "/photos/delete/" + photo_id + "/" , {
+		return this.http.delete(this.baseUrl + "photos/delete/" + photo_id + "/" , {
 				headers: header
 			})
 			.map((responseData) => {

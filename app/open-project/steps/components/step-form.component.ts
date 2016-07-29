@@ -35,13 +35,13 @@ export class StepFormComponent implements OnInit {
 		private _routeParams:ActivatedRoute
 		) {
 
-		this.model = new Step(null, null, null, null);
+		this.model = new Step(null, null, null, null, null);
 	}
 
 	ngOnInit() {	
 		
 		if (this.projectId)
-			this.model = new Step(null, null, null, this.projectId);
+			this.model = new Step(null, null, null, null, this.projectId);
 
 		this._routeParams.params.subscribe(params => {
 	      let step_id = Number.parseInt(params['step_id']); //getting the id of the project 
@@ -75,7 +75,7 @@ export class StepFormComponent implements OnInit {
 			      step: this.model
 			    });
 			    if (!updating)
-					this.model = new Step(null, null, null, this.projectId); //reseting step form
+					this.model = new Step(null, null, null, null, this.projectId); //reseting step form
 			}
 		);
 	}

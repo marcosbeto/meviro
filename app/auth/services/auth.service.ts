@@ -48,31 +48,19 @@ export class AuthService {
     
       if (err)
         return false;
-      
-      this.user = profile; //Setting the user according to response
-      this.createAuthorizationData(token);
 
-      //setting the local storages for the meta user id during login
-      if (this.user['user_metadata']) {
-        if(this.user['user_metadata']['api_user_id']) {
-          this.metauser_id = this.user['user_metadata']['api_user_id'];
-          localStorage.setItem('profile.api_user_id', this.metauser_id.toString()); 
-        }
-      }
-      
-      localStorage.setItem('profile', JSON.stringify(profile)); //Saving user profile to local storage
-
+      this.setUserAndGlobalItens(profile, token);
+     
       this.zone.run(() =>  { // Force angular to execute the Change Detection:
          this.subjectLogin.next(this.user);// Event Trigger
       }); 
     });
+
   }
 
   public logout() {
         
-    this.deleteAuthorizationData();
-    localStorage.removeItem('profile');
-    localStorage.removeItem('profile.api_user_id');
+    this.deleteAuthorizationAndUserData();    
 
     this.zone.run(() => {
         this.user = null;
@@ -80,12 +68,23 @@ export class AuthService {
       }); //says to angular to execute the Change Detection
   }
 
-  public isRegistered(user: any) {
-  
+  public setUserAndGlobalItens(profile:any, token:any) {
 
+    this.user = profile; //Setting the user according to response
+    //setting the local storages for the meta user id during login
+    if (this.user['user_metadata']) {
+      if(this.user['user_metadata']['api_user_id']) {
+        this.metauser_id = this.user['user_metadata']['api_user_id'];
+        localStorage.setItem('profile.api_user_id', this.metauser_id.toString()); 
+      }
+    }
+    localStorage.setItem('profile', JSON.stringify(profile)); //Saving user profile to local storage
+    this.createAuthorizationData(token);
+  }  
+
+  public isRegistered(user: any) {
     let body = {"email":user.email};
 
-    console.log('HEADERS:');
     console.log(this.headers);
 
     return this.http.post(this.metaUserUrl, body, {
@@ -99,7 +98,6 @@ export class AuthService {
   }
 
   public saveMetaUser(user: any) {
-    
     let body = {"email":user.email, "auth0_id": user.user_id};
 
     return this.http.post(this.metaUserUrl + "add/" , body, {
@@ -139,9 +137,12 @@ export class AuthService {
     this.headers.append('Authorization', 'JWT ' + token);
   }
 
-  public deleteAuthorizationData() {
+  public deleteAuthorizationAndUserData() {
     localStorage.removeItem('id_token');
     this.headers.delete('Authorization');
+    localStorage.removeItem('profile');
+    localStorage.setItem('profile.api_user_id',"-");
+    console.log("apagando");
   }
 
   getLogged(obs:Object): Observable<Object> {
