@@ -27,6 +27,32 @@ export const OpenProjectRoutes = [
 	      // { path: ':id',  component: OpenProjectDetailComponent, canActivate: [AuthGuard]},
 	    ] 
 	},
+	{
+		path: '',
+		component: OpenProjectListComponent
+	}
 ];
 
 export const AUTH_PROVIDERS = [AuthGuard, AuthService, OpenProjectService, StepService];
+
+
+
+// {
+// 		path: 'open-project', 
+// 		component: OpenProjectComponent, 
+// 	  	children: [
+// 	      { path: 'add',  component: OpenProjectFormComponent, canActivate: [AuthGuard] },
+// 	      { path: 'update/:id',  component: OpenProjectFormComponent, canActivate: [AuthGuard]},
+// 	      { path: 'delete/:id',  component: OpenProjectFormComponent, canActivate: [AuthGuard]},
+// 	      { path: 'update/:id/step/update/:step_id',  component: StepFormComponent, canActivate: [AuthGuard]},
+// 	      { path: 'update/:id/step/delete/:step_id',  component: StepFormComponent, canActivate: [AuthGuard]},
+// 		  { path: 'project/:project_id/step/:step_id/photo/delete/:photo_id',  component:PhotoFormComponent, canActivate: [AuthGuard]},
+// 	      { path: '',  component: OpenProjectListComponent, canActivate: [AuthGuard]},
+
+// 	      // { path: ':id',  component: OpenProjectDetailComponent, canActivate: [AuthGuard]},
+// 	    ] 
+// 	},
+// 	{
+// 		path: '',
+// 		component: OpenProjectListComponent
+// 	}

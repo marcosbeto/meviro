@@ -42,6 +42,7 @@ export class OpenProjectListComponent implements  OnInit {
 	setRXJSListeners() {
 		this.authService.getLoggedOut(null).subscribe((user: Object) => {
         	this.projects = null;
+        	console.log("out");
      	});
  	}
 	

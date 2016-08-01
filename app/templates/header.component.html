@@ -1,0 +1,25 @@
+<div class="row" style="height:70px;z-index:0;">
+	<div class="col-xs-12 col-md-10 col-md-offset-1" style="margin-top:31px;">
+
+		<ul class="nav nav-pills">
+			
+			<li role="presentation">
+				<img [src]="logo_header" style="height:38px;z-index:10;margin-top:-13px;">
+			</li>
+			<li role="presentation">
+				<span style="font-size:14pt;font-family:'Roboto';font-weight:300;color:#5f5f5f;margin-left:10px;">Tecnologia Assistiva de Baixo Custo</span>
+			</li>
+			
+			<li role="presentation" class="navbar-right" style="font-family:'Roboto';font-size:12pt">
+				<span (click)="authService.login()" *ngIf="!authService.authenticated()">Login</span>
+ 				<span (click)="authService.logout()" *ngIf="authService.authenticated()">Sair</span>
+			</li>
+
+			<li role="presentation" class="navbar-right" style="font-family:'Roboto';font-size:12pt;padding: 0 25px 0 25px;">
+				Como começar
+			</li>
+			
+		</ul>
+
+	</div>
+</div>

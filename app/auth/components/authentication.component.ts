@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, DoCheck } from '@angular/core';
 import { Router, ROUTER_DIRECTIVES } from '@angular/router';
+// import { MetaService, MetaConfig } from 'ng2-meta';
 
 import { AuthService } from '../../auth/services/auth.service';
 
@@ -10,6 +11,7 @@ import { AuthService } from '../../auth/services/auth.service';
 	directives: [
     	ROUTER_DIRECTIVES,
     ],
+    
 })
 
 export class AuthenticationComponent implements OnInit {
@@ -25,18 +27,22 @@ export class AuthenticationComponent implements OnInit {
 	}
 
 	ngOnDestroy() {
-
+		// console.log("destroy");
 		this.getLoggedVar.unsubscribe();
 		this.getLoggedOutVar.unsubscribe();
 	}
 
 	setRXJSListeners() {
+		console.log("adicionando");
 		// --- Listening for login action --- //
 		this.getLoggedVar = this.authService.getLogged(null)
-								.subscribe((user: Object) => {        	
+								.subscribe((user: Object) => {   
+								console.log("user");     	
 						           	// --- Checking if the meta user already exists --- //
 									this.authService.isRegistered(this.authService.user)
 										.subscribe(isRegisteredResult => { 
+											console.log('isRegisteredResult');
+											console.log(isRegisteredResult);
 											if (!isRegisteredResult) {
 												this.addNewUser();	
 											} else {
@@ -60,6 +66,7 @@ export class AuthenticationComponent implements OnInit {
 	}
 
 	addNewUser() {
+		console.log("addding");
 		// --- Saving New Meta User --- //
 		this.authService.saveMetaUser(this.authService.user)
 			.subscribe(metaUserIdResult => { 

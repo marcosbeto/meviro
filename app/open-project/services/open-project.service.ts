@@ -15,14 +15,26 @@ export class OpenProjectService {
 	deleteProjectUrl: string;
 
 	constructor(private http: Http, private authService: AuthService) {
-		this.setApiUrls();
+		console.log('profile.api_user_ids');
+		console.log(localStorage.getItem('profile.api_user_id'));
+		console.log('this.authService.user');
+		console.log(this.authService.user);
+		if (this.authService.user || localStorage.getItem('profile.api_user_id'))
+			this.setApiUrlsLoggedIn();
+		else
+			this.setApiUrlsLoggedOut();
 	}
 
-	setApiUrls() {
+	setApiUrlsLoggedIn() {
 		this.baseUrl = "http://localhost:8000/dashboard/" + localStorage.getItem('profile.api_user_id') + "/";
 		this.listProjectsUrl = this.baseUrl + "projects/";
 		this.updateProjectUrl = this.listProjectsUrl + "update/";
 		this.deleteProjectUrl = this.listProjectsUrl + "delete/";
+	}
+
+	setApiUrlsLoggedOut() {
+		this.baseUrl = "http://localhost:8000/";
+		this.listProjectsUrl = this.baseUrl + "projects/";
 	}
 
 	getProjects(header: Headers){
