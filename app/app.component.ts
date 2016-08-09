@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, ViewContainerRef } from '@angular/core';
 import { Router, ROUTER_DIRECTIVES }    from '@angular/router';
 
 import { AuthService } from './auth/services/auth.service';
@@ -8,6 +8,8 @@ import { LandingComponent } from './landing.component'
 import { FilterBarComponent } from './filter-bar.component'
 import { MetaDataComponent } from './meta-data.component'
 import { AlertComponent } from 'ng2-bootstrap/ng2-bootstrap';
+// import { UPLOAD_DIRECTIVES } from 'ng2-uploader/ng2-uploader';
+
 
 @Component({
     selector: 'my-app',
@@ -21,7 +23,8 @@ import { AlertComponent } from 'ng2-bootstrap/ng2-bootstrap';
         LandingComponent,
         FilterBarComponent,
         MetaDataComponent, 
-        AlertComponent
+        AlertComponent,
+        // UPLOAD_DIRECTIVES
     ],
     templateUrl: 'app/templates/app.component.html',
 })
@@ -30,12 +33,10 @@ import { AlertComponent } from 'ng2-bootstrap/ng2-bootstrap';
 export class AppComponent { 
 
 	logo_header = "app/templates/images/logo_horizontal.png";
-	//;padding-top:39px;padding-bottom:55px;z-index:1;background-image: url('{{ STATIC_URL }}images/multiple_hands_bg_white.png');
-	
-	title = "shit";
+	viewContainerRef: any;
 
-	constructor(private authService: AuthService, private router:Router) {
-	
+	constructor(private authService: AuthService, private router:Router, viewContainerRef:ViewContainerRef) {
+		this.viewContainerRef = viewContainerRef;
 	} 
 
 }

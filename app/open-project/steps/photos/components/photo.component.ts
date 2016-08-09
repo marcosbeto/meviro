@@ -17,15 +17,16 @@ import { PhotoFormComponent } from '../components/photo-form.component';
 
 })
 
-export class PhotoComponent implements OnInit{
+export class PhotoComponent implements OnInit, DoCheck{
 
 	title = "Photo COMPONENT";
 
 	public photos: Photo[]; 
-	public step_id: number; //will be imported by its child StepFormComponent
+	
 	@Input() stepId: number; //recieved by its parent OpenProjectForm
 	@Input() projectId: number;
 	public project_id: number;
+	public step_id: number; //will be imported by its child StepFormComponent
 
 	
 	constructor(
@@ -35,18 +36,25 @@ export class PhotoComponent implements OnInit{
 		private _routeParams:ActivatedRoute) {
 	}
 
+
 	ngOnInit() {	
 
 		this.project_id = this.projectId;
-
 		this.step_id = this.stepId;
+
 		if (this.step_id) {
 			this.getPhotos(this.step_id);
 		}
 	}
 
-	getPhotos(open_project_id: number) { 
-		this.photoService.getPhotos(open_project_id, this.authService.headers)
+	ngDoCheck() { //when modal is opened more than one time, we need to upload those values 
+	    this.project_id = this.projectId;
+		this.step_id = this.stepId;
+	}
+
+
+	getPhotos(step_id: number) { 
+		this.photoService.getPhotos(step_id, this.authService.headers)
 			.subscribe(result => { 
 				this.photos = result;
 			}
@@ -54,7 +62,37 @@ export class PhotoComponent implements OnInit{
 	}
 
 	addNewPhotoToArray_Listener(event:any) {
-    	this.photos.push(event.photo);
+    	// this.photos.push(event.photo);
+
+    	let counter = 0;
+    	let position = 0;
+    	let updating = false;
+    	this.photos.filter(photo => {
+    			if (photo.id == event.photo.id) {
+    				updating = true;
+    				position = counter;
+    			} 
+    			counter++;
+    			return true;
+    		})[0];
+
+    	if (event.action=="delete") { 
+    		this.photos.splice(position, 1);    		
+    	} else {
+    		if (updating) {
+    			this.photos[position] = event.photo;    			
+    		} else {
+    			this.photos.push(event.photo);
+    		}
+    	}
+
+
+  	}
+
+  	ngOnChanges(changes) { //this is important to get the value of the current step
+  		this.step_id = changes.stepId.currentValue;
+  		if (this.step_id)
+			this.getPhotos(this.step_id);
   	}
 	
 }

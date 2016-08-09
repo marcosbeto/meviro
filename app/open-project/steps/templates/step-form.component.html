@@ -1,11 +1,36 @@
-  <h1>STEP FORM</h1>
-<!-- <form> -->
-  Passote: <input type="text" required [(ngModel)]="model.title">
-  <input type="text" required [(ngModel)]="model.project" style="visibility:hidden;">
-  <button type="submit" (click)="saveStep(model.project)" >Submit</button>
+<button class="btn btn-lg btn-success" type="button" (click)="openModal('newStep', model.project, null, false)">
+	Adicionar Nova Etapa
+</button>
+<!-- Modal -->
+<div bsModal #addNewStepModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      
+      	<div class="modal-header">
+	        <button type="button" class="close" aria-label="Close" (click)="addNewStepModal.hide()"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+     	</div>
+      
+      	<div class="modal-body">
+	      	<div *ngIf="action!='addPhoto'">
+	        	Passote: <input type="text" required [(ngModel)]="model.title">
+			</div>
+			
+			<div *ngIf="action=='addPhoto'">
+			  <input type="text" required [(ngModel)]="model.project" style="visibility:hidden;">
+			  <list-photos [projectId]="model.project" [stepId]="step_id"></list-photos>
+			</div>
+   		</div>
 
-<div *ngIf="model.id">
-  <list-photos [projectId]="model.project" [stepId]="step_id"></list-photos>
+	    <div class="modal-footer">
+    	    <button type="button" class="btn btn-default" (click)="addNewStepModal.hide()" data-dismiss="modal">Close</button>
+        	<button type="button" class="btn btn-success" (click)="saveStep(model.project)">Salvar Etapa</button>
+    	</div>
+    </div>
+  </div>
 </div>
+
+
+  
 
 

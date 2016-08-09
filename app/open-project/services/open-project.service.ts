@@ -13,31 +13,28 @@ export class OpenProjectService {
 	listProjectsUrl: string;
 	updateProjectUrl: string;
 	deleteProjectUrl: string;
+	publicAction: boolean = false;
 
 	constructor(private http: Http, private authService: AuthService) {
-		console.log('profile.api_user_ids');
-		console.log(localStorage.getItem('profile.api_user_id'));
-		console.log('this.authService.user');
-		console.log(this.authService.user);
-		if (this.authService.user || localStorage.getItem('profile.api_user_id'))
-			this.setApiUrlsLoggedIn();
-		else
-			this.setApiUrlsLoggedOut();
+
+		this.setApiUrls(localStorage.getItem('profile.api_user_id'), false);
+
 	}
 
-	setApiUrlsLoggedIn() {
-		this.baseUrl = "http://localhost:8000/dashboard/" + localStorage.getItem('profile.api_user_id') + "/";
+	setApiUrls(api_user_id:string, isPublic:boolean) {
+		
+		if (api_user_id && !isPublic)
+			this.baseUrl = "http://localhost:8000/dashboard/" + api_user_id + "/";
+		else
+			this.baseUrl = "http://localhost:8000/";
+
 		this.listProjectsUrl = this.baseUrl + "projects/";
 		this.updateProjectUrl = this.listProjectsUrl + "update/";
 		this.deleteProjectUrl = this.listProjectsUrl + "delete/";
 	}
 
-	setApiUrlsLoggedOut() {
-		this.baseUrl = "http://localhost:8000/";
-		this.listProjectsUrl = this.baseUrl + "projects/";
-	}
-
 	getProjects(header: Headers){
+
 		return this.http.get(this.listProjectsUrl, {
 					headers: header
 				})
@@ -73,7 +70,7 @@ export class OpenProjectService {
 					headers: header
 				})
 				.map((responseData) => {
-					let project = JSON.parse(responseData.json());				
+					let project = JSON.parse(responseData.json());	
 					return new OpenProject(
 						project[0].pk, 
 						project[0].fields.title, 
@@ -95,7 +92,6 @@ export class OpenProjectService {
 	    header.append('Content-Type', 'application/json');
 
 	    if (projectToSave.id!=null) { //update
-	    	console.log(body);
 	    	return this.http.put(this.updateProjectUrl + projectToSave.id + "/",
 	    		body, {
 					headers: header

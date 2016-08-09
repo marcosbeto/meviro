@@ -1,5 +1,4 @@
 import { provideRouter }  from '@angular/router';
-import { MetaService } from 'ng2-meta';
 
 import { OpenProjectRoutes, AUTH_PROVIDERS } from './open-project/routes/open-project.routes';
 import { AuthenticationComponent } from './auth/components/authentication.component';

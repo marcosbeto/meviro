@@ -1,13 +1,32 @@
-<h1>{{ title }}</h1>
-
-
 <div *ngFor="let step of steps"  class="col-1-4">
-    <div>
-     	Titulo Passo: <b>{{step.title}}</b> - {{step.project}} <a routerLink="/open-project/update/{{step.project}}/step/update/{{step.id}}/">Edit</a> | <a routerLink="/open-project/update/{{step.project}}/step/delete/{{step.id}}/">Delete</a> 
+    
+	<div style="margin-bottom: 14px;background-color: #f7f7f9;border: 1px solid #e1e1e8;border-radius: 4px;padding: 20px;margin-top: 16px;">
+		<div class="row">
+			<div class="col-xs-4" style="border-right: 1px solid #dadada;min-height: 90px;">
+				Passo 1: 
+				<h2 style="line-height: 5pt;">
+					{{step.title}}
+				</h2>
+			</div>
+			<div class="col-xs-4" style="border-right: 1px solid #dadada;min-height: 90px;">
+				<div class="row">
+					Descrição:
+				</div>
+			</div>
+			<div class="col-xs-4">
+				<button class="btn btn-default" (click)="stepForm.openModal('addPhoto', step.project, step.id, true, step)">Adicionar Fotos</button>
+			</div>
+	  	</div>
     </div>
+
+    <a (click)="stepForm.openModal('updateStep', step.project, step.id, true, null)"><i class="fa fa-edit" aria-hidden="true" title="Toggle dropdown menu"></i></a> | <a (click)="stepForm.deleteStep(step.project, step.id, null)"><i class="fa fa-trash" aria-hidden="true" title="Toggle dropdown menu"></i></a>
+    
+    <!-- <div>
+     	Titulo Passo: <b>{{step.title}}</b> - {{step.project}} <a routerLink="/open-project/update/{{step.project}}/step/update/{{step.id}}/">Edit</a> | <a routerLink="/open-project/update/{{step.project}}/step/delete/{{step.id}}/">Delete</a>
+    </div> -->
 </div>
 
-<new-step [projectId]="project_id" [steps_parent]="steps" [stepsArray]="steps" (stepsListChange)="addNewStepToArray_Listener($event);">
+<new-step #stepForm='stepForm' [projectId]="project_id" [steps_parent]="steps" [stepsArray]="steps" (stepsListChange)="addStepToArray_Listener($event);">
 	
 </new-step>
 

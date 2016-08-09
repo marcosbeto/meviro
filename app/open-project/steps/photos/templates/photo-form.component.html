@@ -1,6 +1,14 @@
   <h1>PHOTO FORM</h1>
 <!-- <form> -->
-  IMG URL: <input type="original_url" required [(ngModel)]="model.original_url">
+ <!--  IMG URL: <input type="original_url" required [(ngModel)]="model.original_url">
+ -->
+
+  <input type="file" 
+       [ng-file-select]="options" 
+       (onUpload)="handleUpload(stepId, projectId, $event)"
+       multiple>
+       <br>
+
   <input type="text" required [(ngModel)]="model.step" style="visibility:hidden;">
   <button type="submit" (click)="savePhoto(model.step)" >Submit</button>
 

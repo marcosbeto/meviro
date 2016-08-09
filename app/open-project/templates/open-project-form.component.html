@@ -1,15 +1,69 @@
-<h1>OPEN PROJECT FORM</h1>
-<!-- <form> -->
-  Título: <input type="text" required [(ngModel)]="model.title">
-  <br>
-  <hr>
+<div class="row">
+	<div class="col-xs-8 col-xs-offset-2">
 
-  <button type="submit" (click)="saveProject()" >Submit</button>
-  
-  <br>
+		<div class="panel panel-default" style="margin-top:60px;">
+  			<!-- <div class="panel-heading">
+				<h3 class="panel-title">
+					Cadastro de Projetos Assistivos
+				</h3>
+			</div> -->
+  			<div class="panel-body">
+	  			<div *ngIf="(action=='add_phase_1' || action=='update')" class="text-center">
+	  				<div class="row">
+		  				<div class="col-xs-12 text-center">
+		  					<h3 style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif,'Roboto';font-weight:400;">Como se chama o projeto que você quer compartilhar?</h3>
+		  				</div>
+	  				</div>
+	  				<div class="row" style="margin-top:20px;">
+	  					<div class="col-xs-6 col-xs-offset-3">
+							<input type="text" required [(ngModel)]="model.title" style="border-top: 0px;border-left: 0px;border-right: 0px;border-radius: 0px;box-shadow: inset 0 0px 0px rgba(0,0,0,0);-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .0s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .0s;" class="form-control text-center">
+						</div>
+					</div>
+					<div class="row" style="margin-top:40px;">
+						<div class="col-xs-12 text-center">
+							<a (click)="saveProject()" class="btn btn-lg btn-success" role="button">Salvar</a>
+						</div>
+					</div>
+					<br>
+				</div>		
+				<div *ngIf="action=='add_phase_2'" class="text-center">		
+					<div *ngIf="model.id">
+					  
+					  <div class="row" style="margin-top: -40px;">
+					  	<div class="col-xs-12">
+					  		<h2><span class="label label-default" style="background-color:#367317;font-family: 'Roboto';font-weight: 400;padding: 15px;">{{model.title}}</span></h2>
+					  	</div>
+					  </div>
+					  	<div class="row" style="margin-top:20px;">
+						  	<div class="col-xs-12">
+						  		<h4 style="line-height: 25pt;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif,'Roboto';font-weight: 200;font-size:16pt;">Legal! Agora precisamos adicionar o passo-a-passo para construção do seu projeto<br>
+						  		</h4>
+						  	</div>
+					 	</div>
+					  	
+					  	<hr>
+					  	<div class="row">
+						  	<div class="col-xs-12 text-center">
+							  		<!-- <div class="popover top" style="display:block;position:relative;margin-left: auto;margin-right: auto;">
+										<div class="arrow"></div> 
+										<h3 class="popover-title">Já adicionamos o primeiro passo</h3> 
+										<div class="popover-content">
+											<p>A <b>Introdução</b> é o início de tudo, onde você explicará, de forma geral, os objetivos e benefícios do seu projeto.</p> 
+										</div>
+									</div> -->
+						  	</div>	
+						</div>
+					  <list-steps [projectId]="project_id"></list-steps>
+					</div>
+				</div>
 
-<div *ngIf="model.id">
-  <list-steps [projectId]="project_id"></list-steps>
+
+  			</div>
+  		</div>
+		
+	
+		
+	</div>
 </div>
 
 

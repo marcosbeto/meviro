@@ -4,9 +4,9 @@
   "ref": "master",
   "path": "typings",
   "bundle": "typings/tsd.d.ts",
-  "installed": {
-    "jquery/jquery.d.ts": {
-      "commit": "2a24bbb7ca4f13e52c7f6a0ab6144b565bf1ef55"
-    }
-  }
+  // "installed": {
+  //   "jquery/jquery.d.ts": {
+  //     "commit": "2a24bbb7ca4f13e52c7f6a0ab6144b565bf1ef55"
+  //   }  
+  // }
 }

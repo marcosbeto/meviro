@@ -55,7 +55,7 @@ export class StepService {
 				.map((responseData) => {
 					let step = responseData.json();
 					header.delete('Content-Type');
-					return new Step(step.pk, null, step.title, step.project)
+					return new Step(step.id, step.position, step.title, step.content, step.project);
 				});
 
 

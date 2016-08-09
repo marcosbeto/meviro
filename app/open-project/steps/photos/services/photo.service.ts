@@ -35,12 +35,9 @@ export class PhotoService {
 							result.push(
 								new Photo(
 									photo.pk,
-									photo.fields.original_url,
-									photo.fields.medium_url,
-									photo.fields.thumbnail_url,
-									photo.fields.original_width,
-									photo.fields.original_height,
-									photo.fields.step
+									photo.fields.created,
+									photo.fields.file,
+									photo.fields.step_id
 								)
 							);
 						});
@@ -52,8 +49,9 @@ export class PhotoService {
 	savePhoto(photoId: number, photoToSave:Photo, header: Headers) {
 
 	    let body = JSON.stringify(photoToSave);
-
-	    header.append('Content-Type', 'application/json');
+		
+		if (header.get('Content-Type')!='application/json')
+			header.append('Content-Type', 'application/json');
 
 	    if (photoToSave.id!=null) { //update
 	    	return this.http.put(this.listPhotosUrl + photoId + "/steps/update/" + photoToSave.id + "/" ,

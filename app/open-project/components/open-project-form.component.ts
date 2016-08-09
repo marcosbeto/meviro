@@ -22,6 +22,7 @@ export class OpenProjectFormComponent implements OnInit {
 
 	public project_id: number;
 	model: OpenProject;	
+	action: string;
 
 	constructor(
 		private openProjectService: OpenProjectService,
@@ -32,12 +33,12 @@ export class OpenProjectFormComponent implements OnInit {
 		) {
 		//starting a new model that will be populated by a specific user
 		this.model = new OpenProject(null, null, null, null, null, null, null, null, localStorage.getItem('profile.api_user_id')); 
+
 	}
 
 	ngOnInit() {	
 
 		let action = this._routeParams.url['_value'][0]['path']; //extracting from the URL the action that will be executed
-
 		this._routeParams.params.subscribe(params => {
 	      let id = Number.parseInt(params['id']); //getting the id of the project 
 	      if (id) { //if an `id` is presented at the URL 
@@ -48,6 +49,11 @@ export class OpenProjectFormComponent implements OnInit {
 	      }
 	    });
 
+		if (this.router.url.indexOf("add") !== -1)
+			this.action = "add_phase_1";
+		else
+			this.action = "update";
+
 	}
 
 	saveProject() {
@@ -55,6 +61,7 @@ export class OpenProjectFormComponent implements OnInit {
 			.subscribe(result => { 
 				this.model = result;
 				this.project_id = this.model.id;
+				this.action = "add_phase_2";
 			}
 		);
 	}

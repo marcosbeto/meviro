@@ -1,12 +1,12 @@
-
-	
-
 	<header-outlet></header-outlet>
-	<landing-outlet></landing-outlet>
-	<filter-bar-outlet></filter-bar-outlet>
+	
+	<div *ngIf="router.url=='/'">
+		<landing-outlet></landing-outlet>
+		<filter-bar-outlet></filter-bar-outlet>
+	</div>
 	
 	<router-outlet></router-outlet>
-	<alert type="info">ng2-bootstrap hello world!</alert>
+	<!-- <alert type="info">ng2-bootstrap hello world!</alert> -->
 
 
 

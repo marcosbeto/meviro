@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, DoCheck, NgZone } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, DoCheck, ViewChild, NgZone } from '@angular/core';
 import { Router, ROUTER_DIRECTIVES, ActivatedRoute } from '@angular/router';
 
 import { AuthService } from '../../../auth/services/auth.service';
@@ -21,8 +21,6 @@ import { StepFormComponent } from '../components/step-form.component';
 
 export class StepComponent implements OnInit{
 
-	title = "STEP COMPONENT";
-
 	public steps: Step[]; //will be imported by its child StepFormComponent
 	public project_id: number; //will be imported by its child StepFormComponent
 	@Input() projectId: number; //recieved by its parent OpenProjectForm
@@ -31,7 +29,8 @@ export class StepComponent implements OnInit{
 		private stepService: StepService,
 		private router: Router,
 		private authService: AuthService,
-		private _routeParams:ActivatedRoute) {
+		private _routeParams:ActivatedRoute, zone: NgZone) {
+		
 	}
 
 	ngOnInit() {	
@@ -49,8 +48,30 @@ export class StepComponent implements OnInit{
 		);
 	}
 
-	addNewStepToArray_Listener(event:any) {
-    	this.steps.push(event.step);
+	addStepToArray_Listener(event:any) {
+    	
+    	let counter = 0;
+    	let position = 0;
+    	let updating = false;
+    	this.steps.filter(step => {
+    			if (step.id == event.step.id) {
+    				updating = true;
+    				position = counter;
+    			} 
+    			counter++;
+    			return true;
+    		})[0];
+
+    	if (event.action=="delete") { 
+    		this.steps.splice(position, 1);    		
+    	} else {
+    		if (updating) {
+    			this.steps[position] = event.step;    			
+    		} else {
+    			this.steps.push(event.step);
+    		}
+    	}
   	}
+
 	
 }

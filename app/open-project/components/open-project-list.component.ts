@@ -28,22 +28,17 @@ export class OpenProjectListComponent implements  OnInit {
 
 	ngOnInit() {					 	
 		this.getProjects();
-		this.setRXJSListeners();		
 	}
 
 	getProjects() {
+
+		if (this.router.url == "/")
+			this.openProjectService.setApiUrls(null, true);
+
 		this.openProjectService.getProjects(this.authService.headers)
 			.subscribe(res => { 
 				this.projects = res;
 			}
 		);
 	}
-
-	setRXJSListeners() {
-		this.authService.getLoggedOut(null).subscribe((user: Object) => {
-        	this.projects = null;
-        	console.log("out");
-     	});
- 	}
-	
 }

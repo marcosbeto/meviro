@@ -3,13 +3,15 @@
 
 <div *ngFor="let photo of photos"  class="col-1-4">
     <div>
-     	FOTO URL: <b>{{photo.original_url}}</b> - {{photo.step}} 
-     	<!-- <a routerLink="/open-project/update/{{step.project}}/step/update/{{step.id}}/">Edit</a>  -->| <a routerLink="/open-project/project/{{project_id}}/step/{{photo.step}}/photo/delete/{{photo.id}}/">Delete</a> 
+    <img src="http://localhost:8000/{{photo.file}}" style="width:60px;height:40px;"/>
+     	<!-- FOTO URL: <b>{{photo.file}}</b> - {{photo.step}}  -->
+     	<!-- <a routerLink="/open-project/update/{{step.project}}/step/update/{{step.id}}/">Edit</a>  -->| 
+     	<a (click)="photoForm.deletePhoto(photo.step_id, photo.id)">Delete</a> 
+    	<!-- url(r'^dashboard/(?P<metauser_id>[0-9]+)/photos/delete/(?P<pk>[0-9]+)/$', photo_detail, name='photo-detail'), -->
     </div>
 </div>
 
-<new-photo [stepId]="step_id" [photos_parent]="photos" [photosArray]="photos" (photosListChange)="addNewPhotoToArray_Listener($event);">
-	
+<new-photo #photoForm='photoForm' [stepId]="step_id" [projectId]="project_id" [photos_parent]="photos" [photosArray]="photos" (photosListChange)="addNewPhotoToArray_Listener($event);">
 </new-photo>
 
 
