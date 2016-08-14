@@ -1,18 +1,24 @@
-<h1>{{ title }}</h1>
 
-
-<div *ngFor="let photo of photos"  class="col-1-4">
-    <div>
-    <img src="http://localhost:8000/{{photo.file}}" style="width:60px;height:40px;"/>
-     	<!-- FOTO URL: <b>{{photo.file}}</b> - {{photo.step}}  -->
-     	<!-- <a routerLink="/open-project/update/{{step.project}}/step/update/{{step.id}}/">Edit</a>  -->| 
-     	<a (click)="photoForm.deletePhoto(photo.step_id, photo.id)">Delete</a> 
-    	<!-- url(r'^dashboard/(?P<metauser_id>[0-9]+)/photos/delete/(?P<pk>[0-9]+)/$', photo_detail, name='photo-detail'), -->
-    </div>
-</div>
 
 <new-photo #photoForm='photoForm' [stepId]="step_id" [projectId]="project_id" [photos_parent]="photos" [photosArray]="photos" (photosListChange)="addNewPhotoToArray_Listener($event);">
 </new-photo>
+
+<div class="row" [dragula]='"second-bag"' style="margin-top:40px;">
+	<div class="col-xs-3" *ngFor="let photo of photos" >
+		<div style="position: absolute;top:9px;right:24px;">
+			<a (click)="photoForm.deletePhoto(photo.step_id, photo.id)" style="color: #fff;">
+				<span aria-hidden="true" class="glyphicon glyphicon-remove" 
+					style="font-size: 12pt;"></span>
+			</a>
+		</div>
+		<div class="thumbnail">
+			<img src="http://localhost:8000/{{photo.file}}"/>
+		</div>
+	</div>
+</div>
+
+
+
 
 
 <!-- Passo Título: <input type="text" required [(ngModel)]="model.title"> -->

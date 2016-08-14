@@ -8,6 +8,7 @@ export class OpenProject {
 		public category?: string,
 		public difficulty?: string,
 		public tags?: string,
+		public abstract?: string,
 		public metauser_id?: number
 	) { }
 }

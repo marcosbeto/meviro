@@ -1,12 +1,13 @@
-<div *ngFor="let step of steps"  class="col-1-4">
-    
-	<div style="margin-bottom: 14px;background-color: #f7f7f9;border: 1px solid #e1e1e8;border-radius: 4px;padding: 20px;margin-top: 16px;">
-		<div class="row">
+	<div *ngFor="let step of steps; let i=index" [dragula]='"first-bag"' #stepsitem>
+
+		<div class="row" id="stepContainer_{{i}}" style="margin-right:0px;margin-left: 0px;display:block;margin-bottom: 14px;background-color: #f7f7f9;border: 1px solid #e1e1e8;border-radius: 4px;padding: 20px;margin-top: 16px;cursor: move;cursor: grab;cursor: -moz-grab;cursor: -webkit-grab;text-align:center;">
 			<div class="col-xs-4" style="border-right: 1px solid #dadada;min-height: 90px;">
-				Passo 1: 
+				Passo {{i+1}}: <input class="position_input" type="text" value="{{i}}">
 				<h2 style="line-height: 5pt;">
 					{{step.title}}
 				</h2>
+				<br>
+				<a (click)="stepForm.openModal('updateStep', step.project, step.id, true, null)"><i class="fa fa-edit" aria-hidden="true" title="Toggle dropdown menu"></i></a> | <a (click)="stepForm.deleteStep(step.project, step.id, null)"><i class="fa fa-trash" aria-hidden="true" title="Toggle dropdown menu"></i></a>
 			</div>
 			<div class="col-xs-4" style="border-right: 1px solid #dadada;min-height: 90px;">
 				<div class="row">
@@ -14,17 +15,11 @@
 				</div>
 			</div>
 			<div class="col-xs-4">
-				<button class="btn btn-default" (click)="stepForm.openModal('addPhoto', step.project, step.id, true, step)">Adicionar Fotos</button>
+				<button class="btn btn-default" (click)="stepForm.openModal('addPhoto', step.project, step.id, true, step)">Gerenciar Fotos</button>
 			</div>
 	  	</div>
-    </div>
 
-    <a (click)="stepForm.openModal('updateStep', step.project, step.id, true, null)"><i class="fa fa-edit" aria-hidden="true" title="Toggle dropdown menu"></i></a> | <a (click)="stepForm.deleteStep(step.project, step.id, null)"><i class="fa fa-trash" aria-hidden="true" title="Toggle dropdown menu"></i></a>
-    
-    <!-- <div>
-     	Titulo Passo: <b>{{step.title}}</b> - {{step.project}} <a routerLink="/open-project/update/{{step.project}}/step/update/{{step.id}}/">Edit</a> | <a routerLink="/open-project/update/{{step.project}}/step/delete/{{step.id}}/">Delete</a>
-    </div> -->
-</div>
+  	</div>
 
 <new-step #stepForm='stepForm' [projectId]="project_id" [steps_parent]="steps" [stepsArray]="steps" (stepsListChange)="addStepToArray_Listener($event);">
 	

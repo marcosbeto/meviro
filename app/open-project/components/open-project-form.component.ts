@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, DoCheck } from '@angular/core';
 import { Router, ROUTER_DIRECTIVES, ActivatedRoute} from '@angular/router';
+import {DROPDOWN_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
+import {CORE_DIRECTIVES} from '@angular/common';
 
 import { AuthService } from '../../auth/services/auth.service';
 import { OpenProject } from '../models/open-project.model';
@@ -9,11 +11,14 @@ import { StepFormComponent } from '../steps/components/step-form.component'
 import { StepService } from '../steps/services/step.service';
 import { PhotoService } from '../steps/photos/services/photo.service';
 
+import { AppSettings } from '../../app.settings'
+
 
 @Component({
 	templateUrl: 'app/open-project/templates/open-project-form.component.html',
 	directives: [
 		StepComponent,
+		DROPDOWN_DIRECTIVES
 	],
 	providers:  [StepService, PhotoService]
 })
@@ -23,6 +28,8 @@ export class OpenProjectFormComponent implements OnInit {
 	public project_id: number;
 	model: OpenProject;	
 	action: string;
+	categories = AppSettings.ALL_CATEGORIES;
+	selectedCategory: {} = {'id':0, 'name':'Selecione uma categoria'};
 
 	constructor(
 		private openProjectService: OpenProjectService,
@@ -32,7 +39,7 @@ export class OpenProjectFormComponent implements OnInit {
 		private stepService: StepService
 		) {
 		//starting a new model that will be populated by a specific user
-		this.model = new OpenProject(null, null, null, null, null, null, null, null, localStorage.getItem('profile.api_user_id')); 
+		this.model = new OpenProject(null, null, null, null, null, null, null, null, null, localStorage.getItem('profile.api_user_id')); 
 
 	}
 
@@ -55,6 +62,13 @@ export class OpenProjectFormComponent implements OnInit {
 			this.action = "update";
 
 	}
+	
+	dropdownSetup(category:any) {
+
+		this.selectedCategory = category;
+		this.model.category = category.id;
+
+	}
 
 	saveProject() {
 		this.openProjectService.saveProject(this.model, this.authService.headers)
@@ -71,6 +85,13 @@ export class OpenProjectFormComponent implements OnInit {
 			.subscribe(result => { 
 				this.model = result;
 				this.project_id = this.model.id;
+
+				this.selectedCategory = this.categories.filter(category => {
+					if (category['id'] == this.model.category) {
+						return true;
+					} 
+					return false;
+				})[0];
 			}
 		);
 	}

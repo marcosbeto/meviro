@@ -39,11 +39,11 @@ export class PhotoFormComponent implements OnInit, DoCheck {
 		private router: Router,
 		private authService: AuthService, 
 		private _routeParams:ActivatedRoute,
-		zone: NgZone,
+		zone: NgZone
 		) {
 
 		this.zone = zone;
-		this.model = new Photo(null, null, null, null, null, null, null);
+		this.model = new Photo(null, null, null, null);
 
 	}
 
@@ -54,7 +54,7 @@ export class PhotoFormComponent implements OnInit, DoCheck {
 			this.uploadedFiles.push(data);
 			this.model = data;
 
-			data.file = (data.file.substring(data.file.indexOf('static'));
+			data.file = data.file.substring(data.file.indexOf('static'));
 			
 			this.photosListChange.emit({
 		      photo: this.model
@@ -65,9 +65,9 @@ export class PhotoFormComponent implements OnInit, DoCheck {
 	ngOnInit() {	
 		
 		if (this.stepId)
-			this.model = new Photo(null, null, null, null, null, null, this.stepId);
+			this.model = new Photo(null, null, null, this.stepId);
 
-		this.options.url = "http://localhost:8000/upload/projects/"+ this.projectId + "/step/" + this.stepId + "/";		
+		this.options['url'] = "http://localhost:8000/upload/projects/"+ this.projectId + "/step/" + this.stepId + "/";
 		
 		this._routeParams.params.subscribe(params => {
 	      let photo_id = Number.parseInt(params['photo_id']); //getting the id of the project 
@@ -95,7 +95,7 @@ export class PhotoFormComponent implements OnInit, DoCheck {
         
       }); 
 		
-		this.options.url = "http://localhost:8000/upload/projects/"+ this.projectId + "/step/" + this.stepId + "/";	
+		this.options['url'] = "http://localhost:8000/upload/projects/"+ this.projectId + "/step/" + this.stepId + "/";	
 	}
 
 	savePhoto(step_id:number) {
@@ -112,7 +112,7 @@ export class PhotoFormComponent implements OnInit, DoCheck {
 			      photo: this.model
 			    });
 			    if (!updating)
-					this.model = new Photo(null, null, null, null, null, null, this.stepId); //reseting step form
+					this.model = new Photo(null, null, null, this.stepId); //reseting step form
 			}
 		);
 	}
@@ -130,7 +130,7 @@ export class PhotoFormComponent implements OnInit, DoCheck {
 		this.photoService.deletePhoto(step_id, photo_id, this.authService.headers)
 			.subscribe(result => { 
 				console.log("apagado");
-				this.model = new Photo(photo_id, null, null, null, step_id); //reseting step form
+				this.model = new Photo(photo_id, null, null, step_id); //reseting step form
 				this.photosListChange.emit({
 			      photo: this.model,
 			      action: 'delete'
@@ -138,25 +138,5 @@ export class PhotoFormComponent implements OnInit, DoCheck {
 			}
 		);
 	}
-
-	
-
-	// deleteStep(project_id:number, step_id: number) {
-
-	// 	this.stepService.deleteStep(project_id, step_id, this.authService.headers)
-	// 		.subscribe(result => { 
-	// 			this.model = new Step(step_id, null, null, null, project_id); //reseting step form
-	// 			this.stepsListChange.emit({
-	// 		      step: this.model,
-	// 		      action: 'delete'
-	// 		    });
-	// 		}
-	// 	);
-	// }
-
-	
-
-
-	
 	
 }

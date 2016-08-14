@@ -15,7 +15,9 @@
     'moment':                     'node_modules/moment/moment.js',
     'ng2-meta':                   'node_modules/ng2-meta/dist/meta.service.js',
     'ng2-bootstrap':              'node_modules/ng2-bootstrap',
-    'ng2-uploader':               'node_modules/ng2-uploader'
+    'ng2-uploader':               'node_modules/ng2-uploader',
+    'dragula':                    'node_modules/dragula/dist/dragula.min.js',
+    'ng2-dragula':                'node_modules/ng2-dragula'
   };
 
   // packages tells the System loader how to load when no filename and/or no extension
@@ -26,9 +28,9 @@
     'angular2-in-memory-web-api': { main: 'index.js', defaultExtension: 'js' },
     'ng2-meta':                   { defaultExtension: 'js' },
     'ng2-bootstrap':              { defaultExtension: 'js' },
-    'ng2-uploader': {
-        defaultExtension: 'js'
-      }
+    'ng2-uploader':               { defaultExtension: 'js' },
+    'dragula':                { defaultExtension: 'js' },
+    'ng2-dragula':                { defaultExtension: 'js' }
   };
 
   var ngPackageNames = [

@@ -8,17 +8,78 @@
 				</h3>
 			</div> -->
   			<div class="panel-body">
-	  			<div *ngIf="(action=='add_phase_1' || action=='update')" class="text-center">
+	  			<div *ngIf="(action=='add_phase_1' || action=='update')">
 	  				<div class="row">
-		  				<div class="col-xs-12 text-center">
-		  					<h3 style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif,'Roboto';font-weight:400;">Como se chama o projeto que você quer compartilhar?</h3>
-		  				</div>
-	  				</div>
-	  				<div class="row" style="margin-top:20px;">
-	  					<div class="col-xs-6 col-xs-offset-3">
-							<input type="text" required [(ngModel)]="model.title" style="border-top: 0px;border-left: 0px;border-right: 0px;border-radius: 0px;box-shadow: inset 0 0px 0px rgba(0,0,0,0);-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .0s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .0s;" class="form-control text-center">
+	  					<div class="col-xs-6">
+			  				<div class="row" style="padding:20px 35px 0px 35px;">
+				  				<div class="col-xs-12">
+				  					<h3 style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif,'Roboto';font-weight:bold;">Qual o nome do seu projeto?</h3>
+				  				</div>
+			  				</div>
+			  				<div class="row" style="padding:10px 35px 0 35px;">
+			  					<div class="col-xs-12">
+									<input type="text" required [(ngModel)]="model.title" style="height:57px;font-size:14pt;" class="form-control">
+									<!-- border-top: 0px;border-left: 0px;border-right: 0px;border-radius: 0px;box-shadow: inset 0 0px 0px rgba(0,0,0,0);-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .0s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .0s; -->
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-6" style="margin-top: 6px;">
+			  				<div class="row" style="padding:20px 35px 0px 35px;">
+				  				<div class="col-xs-12">
+				  					<h3 style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif,'Roboto';font-weight:400;font-size:14pt;">Categoria:</h3>
+				  				</div>
+			  				</div>
+			  				<div class="row" style="padding:10px 35px 0 35px;">
+			  					<div class="col-xs-12">
+									<!-- Single button -->
+									<div class="btn-group" dropdown keyboardNav="true">
+										<button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" style="    height: 57px;font-size: 12pt;" dropdownToggle>
+											{{selectedCategory.name}} <span class="caret" style="margin:0 5px 0 5px;"></span>
+										</button>
+										<ul class="dropdown-menu" dropdownMenu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+
+											<div *ngFor="let category of categories">
+												<li role="menuitem" style="padding: 5px 5px 5px 8px;font-size: 12pt;">
+													<a class="dropdown-item" (click)="dropdownSetup(category)" style="color:#000;">	
+													    {{category.name}}
+													</a>
+												</li>
+											</div>
+
+										<!-- 	<li role="menuitem"><a class="dropdown-item" (click)="model.category='1'">Action</a></li>
+											<li role="menuitem"><a class="dropdown-item" (click)="model.category='2'">Another action</a></li>
+											<li role="menuitem"><a class="dropdown-item" (click)="model.category='3'">Something else here</a></li> -->
+										</ul>
+									</div>
+									<!-- border-top: 0px;border-left: 0px;border-right: 0px;border-radius: 0px;box-shadow: inset 0 0px 0px rgba(0,0,0,0);-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .0s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .0s; -->
+								</div>
+							</div>
 						</div>
 					</div>
+
+					<!-- ////////// -->
+<!-- 
+					<div class="row" style="background-color: #ededed;margin-top: 40px;">
+					  <div class="col-xs-12">
+					  </div>
+					</div> -->
+
+					<div class="row" style="padding:20px 35px 0px 35px;">
+		  				<div class="col-xs-12">
+		  					<h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif,'Roboto';font-weight:400;font-size:16pt;">Descreva o problema que o projeto irá resolver:</h3>
+		  				</div>
+	  				</div>
+	  				<div class="row" style="padding:10px 35px 0 35px;">
+	  					<div class="col-xs-12">
+							<input type="text" [(ngModel)]="model.abstract" style="height:57px;font-size:14pt;" class="form-control">
+						</div>
+					</div>
+
+
+
+					<!-- /////////// -->
+
+
 					<div class="row" style="margin-top:40px;">
 						<div class="col-xs-12 text-center">
 							<a (click)="saveProject()" class="btn btn-lg btn-success" role="button">Salvar</a>

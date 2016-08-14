@@ -54,6 +54,7 @@ export class OpenProjectService {
 									project.fields.category, 
 									project.fields.difficulty, 
 									project.fields.tags, 
+									project.fields.abstract,
 									project.fields.metauser_id
 								)
 							);
@@ -80,6 +81,7 @@ export class OpenProjectService {
 						project[0].fields.category, 
 						project[0].fields.difficulty, 
 						project[0].fields.tags, 
+						project[0].fields.abstract,
 						project[0].fields.metauser_id
 					);
 				});
@@ -108,6 +110,7 @@ export class OpenProjectService {
 									project.category, 
 									project.difficulty, 
 									project.tags, 
+									project.abstract,
 									project.metauser_id
 								)
 				});
@@ -129,7 +132,8 @@ export class OpenProjectService {
 							project.last_update_date, 
 							project.category, 
 							project.difficulty, 
-							project.tags, 
+							project.tags,
+							project.abstract, 
 							project.metauser_id
 						);
 		});

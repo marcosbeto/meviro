@@ -63,11 +63,8 @@ export class PhotoService {
 					header.delete('Content-Type');
 					return new Photo(
 							photo.pk,
-							photo.original_url,
-							photo.medium_url,
-							photo.thumbnail_url,
-							photo.original_width,
-							photo.original_height,
+							photo.create,
+							photo.file,
 							photo.step
 						);
 				});
@@ -75,7 +72,7 @@ export class PhotoService {
 
 	    }
 
-		return this.http.post(this.listPhotosUrl + photoToSave.step + "/photos/add/", 
+		return this.http.post(this.listPhotosUrl + photoToSave['step'] + "/photos/add/",
 			body, {
 				headers: header
 			})
@@ -84,11 +81,8 @@ export class PhotoService {
 				header.delete('Content-Type');
 				return new Photo(
 						photo.id, 
-						photo.original_url,
-						photo.medium_url,
-						photo.thumbnail_url,
-						photo.original_width,
-						photo.original_height,
+						photo.create,
+						photo.file,
 						photo.step
 					);
 			});
@@ -103,11 +97,8 @@ export class PhotoService {
 					let photo = JSON.parse(responseData.json());
 					return new Photo(
 							photo[0].pk, 
-							photo[0].fields.original_url,
-							photo[0].fields.medium_url,
-							photo[0].fields.thumbnail_url,
-							photo[0].fields.original_width,
-							photo[0].fields.original_height,
+							photo[0].fields.create,
+							photo[0].fields.file,
 							photo[0].fields.step
 						);
 				});

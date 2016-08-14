@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, DoCheck, NgZone } from '@angular/core';
 import { Router, ROUTER_DIRECTIVES, ActivatedRoute } from '@angular/router';
+import { Dragula, DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { AuthService } from '../../../../auth/services/auth.service';
 import { Photo } from '../models/photo.model';
@@ -12,8 +13,10 @@ import { PhotoFormComponent } from '../components/photo-form.component';
 	templateUrl: 'app/open-project/steps/photos/templates/photo.component.html',
 	directives: [
 		ROUTER_DIRECTIVES,
+		Dragula,
 		PhotoFormComponent
 	],
+	viewProviders: [DragulaService]
 
 })
 
@@ -89,7 +92,7 @@ export class PhotoComponent implements OnInit, DoCheck{
 
   	}
 
-  	ngOnChanges(changes) { //this is important to get the value of the current step
+  	ngOnChanges(changes:any) { //this is important to get the value of the current step
   		this.step_id = changes.stepId.currentValue;
   		if (this.step_id)
 			this.getPhotos(this.step_id);
