@@ -1,22 +1,43 @@
 
 
-<new-photo #photoForm='photoForm' [stepId]="step_id" [projectId]="project_id" [photos_parent]="photos" [photosArray]="photos" (photosListChange)="addNewPhotoToArray_Listener($event);">
-</new-photo>
+<!-- <new-photo #photoForm='photoForm' [stepId]="step_id" [projectId]="project_id" [photos_parent]="photos" [photosArray]="photos" (photosListChange)="addNewPhotoToArray_Listener($event);">
+</new-photo> -->
+<form>
+	<input #elem type="file" 
+	    [ng-file-select]="options" 
+	    (onUpload)="afterFileUpload(stepId, projectId, $event)"
+	    multiple
+	    class="btn btn-success"
+	    id="inputFile"
+	    >
+</form>
 
-<div class="row" [dragula]='"second-bag"' style="margin-top:40px;">
-	<div class="col-xs-3" *ngFor="let photo of photos" >
-		<div style="position: absolute;top:9px;right:24px;">
-			<a (click)="photoForm.deletePhoto(photo.step_id, photo.id)" style="color: #fff;">
-				<span aria-hidden="true" class="glyphicon glyphicon-remove" 
-					style="font-size: 12pt;"></span>
-			</a>
-		</div>
-		<div class="thumbnail">
-			<img src="http://localhost:8000/{{photo.file}}"/>
+<hr>
+
+<div class="row">
+	<div *ngIf="photos">
+		<div dnd-sortable-container [dropZones]="['boxers-zone']" [sortableData]="photos">
+			<div *ngFor="let photo of photos; let i = index" dnd-sortable (onDropSuccess)="updatePosition($event)" [sortableIndex]="i" [ngClass]="{row: (i+1)%3==0}">
+				<div class="col-xs-4">
+					<div style="position: absolute;top:9px;right:24px;">
+						<a (click)="deletePhoto(photo.step_id, photo.id)" style="color: #fff;">
+							<span aria-hidden="true" class="glyphicon glyphicon-remove" 
+								style="font-size: 12pt;"></span>
+						</a>
+					</div>
+					<div *ngIf="photo.file">
+						<div class="thumbnail">
+							<img src="http://localhost:8000/{{photo.file}}"/>
+						</div>
+						<!-- <input #male name="gender" type="radio" value="Male" (click)="gender = male.value" /> -->
+						<!-- <input #m [checked]="model.Gender == m.value" (click)="model.Gender = m.value" name="Gender" value="male" type="radio"> -->
+						<input name="mainPhoto" [checked]="photo.isProjectPhoto == true" value="{{photo.id}}" (click)="setMainPhoto(photo, i)" type="radio">
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
-
 
 
 

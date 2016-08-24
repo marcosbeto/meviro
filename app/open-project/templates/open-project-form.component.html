@@ -34,7 +34,7 @@
 									<!-- Single button -->
 									<div class="btn-group" dropdown keyboardNav="true">
 										<button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" style="    height: 57px;font-size: 12pt;" dropdownToggle>
-											{{selectedCategory.name}} <span class="caret" style="margin:0 5px 0 5px;"></span>
+											<span *ngIf="selectedCategory">{{selectedCategory.name}}</span> <span class="caret" style="margin:0 5px 0 5px;"></span>
 										</button>
 										<ul class="dropdown-menu" dropdownMenu role="menu" aria-labelledby="simple-btn-keyboard-nav">
 
@@ -114,7 +114,7 @@
 									</div> -->
 						  	</div>	
 						</div>
-					  <list-steps [projectId]="project_id"></list-steps>
+					  <list-steps [projectId]="project_id" ></list-steps>
 					</div>
 				</div>
 

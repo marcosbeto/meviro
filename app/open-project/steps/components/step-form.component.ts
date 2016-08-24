@@ -1,6 +1,6 @@
 declare var tinymce:any;
 
-import { Component, EventEmitter, Input, OnInit, Output, DoCheck, ViewChild} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, DoCheck, ViewChild, NgZone} from '@angular/core';
 import { Router, ROUTER_DIRECTIVES, ActivatedRoute} from '@angular/router';
 import {MODAL_DIRECTIVES, BS_VIEW_PROVIDERS} from 'ng2-bootstrap/ng2-bootstrap';
 
@@ -42,7 +42,8 @@ export class StepFormComponent implements OnInit {
 		private stepService: StepService,
 		private router: Router,
 		private authService: AuthService, 
-		private _routeParams:ActivatedRoute
+		private _routeParams:ActivatedRoute,
+		private zone: NgZone
 		) {
 
 		this.model = new Step(null, null, null, null, null);
@@ -80,12 +81,16 @@ export class StepFormComponent implements OnInit {
       	});
 	}
 
+
+
 	saveStep(project_id:number) {
 
 		let updating = false;
+		
 		if (this.model.id)
 			updating = true;
 
+		this.model.position = this.stepsArray.length; 
 		this.model.content = tinymce.activeEditor.getContent();
 
 		this.stepService.saveStep(project_id, this.model, this.authService.headers)
@@ -95,6 +100,7 @@ export class StepFormComponent implements OnInit {
 			      step: this.model,
 			      action: 'saveUpdate'
 			    });
+			    this.addNewStepModal.hide();
 			    if (!updating)
 					this.model = new Step(null, null, null, null, project_id); //reseting step form
 			}
@@ -118,7 +124,6 @@ export class StepFormComponent implements OnInit {
 	}
 
 	getStepDetail(project_id:number, step_id: number, openModal:boolean) { 
-		// this.model = null;
 		this.stepService.getStepDetail(project_id, step_id, this.authService.headers)
 			.subscribe(result => { 
 				this.model = result;

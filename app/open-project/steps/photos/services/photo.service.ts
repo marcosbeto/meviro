@@ -12,6 +12,8 @@ export class PhotoService {
 	baseUrl: string;
 	listPhotosUrl: string;
 	saveStepUrl: string;
+	uploadPhotoUrl: string;
+	updateMainPhotoUrl: string;
 	
 	constructor(private http: Http, private authService:AuthService) {
 		this.setApiUrls();		
@@ -20,24 +22,34 @@ export class PhotoService {
 	setApiUrls() {
 		this.baseUrl = "http://localhost:8000/dashboard/" + this.authService.metauser_id + "/";
 		this.listPhotosUrl = this.baseUrl + "steps/";
+		this.uploadPhotoUrl = "http://localhost:8000/upload/projects/";
+		this.updateMainPhotoUrl = "http://localhost:8000/projects/" ;
 	}
 
-	getPhotos(stepId:number, header: Headers){
+	getPhotos(stepId:number, isPublic:boolean, header: Headers){
 		
-		return this.http.get(this.listPhotosUrl + stepId + "/photos/", {
+		if (isPublic)
+			this.listPhotosUrl = this.updateMainPhotoUrl + "step/" +  stepId +  "/";
+		else
+			this.listPhotosUrl = this.baseUrl + "steps/" + stepId + "/photos/";
+			
+		return this.http.get(this.listPhotosUrl, {
 					headers: header
 				})
 				.map((responseData) => {
 					let photos = JSON.parse(responseData.json());
 					let result: Array<Photo> = [];
 					if (photos) {			
+
 						photos.forEach((photo:any) => {						
 							result.push(
 								new Photo(
 									photo.pk,
 									photo.fields.created,
 									photo.fields.file,
-									photo.fields.step_id
+									photo.fields.position,
+									photo.fields.step,
+									photo.fields.isProjectPhoto
 								)
 							);
 						});
@@ -46,46 +58,84 @@ export class PhotoService {
 				});
 	}
 
-	savePhoto(photoId: number, photoToSave:Photo, header: Headers) {
+	savePhoto(projectId:number, stepId:number, photoToSave:Photo, header: Headers) {
 
+		delete photoToSave.file; //the file won't be updated, so we need to remove it from the body of the request
 	    let body = JSON.stringify(photoToSave);
 		
 		if (header.get('Content-Type')!='application/json')
-			header.append('Content-Type', 'application/json');
+	    	header.append('Content-Type', 'application/json');
 
-	    if (photoToSave.id!=null) { //update
-	    	return this.http.put(this.listPhotosUrl + photoId + "/steps/update/" + photoToSave.id + "/" ,
-	    		body, {
-					headers: header
-				})
-				.map((responseData) => {
-					let photo = responseData.json();
-					header.delete('Content-Type');
-					return new Photo(
-							photo.pk,
-							photo.create,
-							photo.file,
-							photo.step
-						);
-				});
+    	return this.http.put(this.uploadPhotoUrl + projectId + "/step/" + stepId + "/update/" + photoToSave.id + "/" ,
+    		body, {
+				headers: header
+			})
+			.map((responseData) => {
+
+				let photo = responseData.json();
+				header.delete('Content-Type');
+				return new Photo(
+						photo.id, 
+						photo.created,
+						photo.file,
+						photo.position,
+						photo.step,
+						photo.isProjectPhoto
+					);
+			});
+
+	}
+
+	// getMainPhoto(projectId:number, header: Headers) {
+
+	// 	return this.http.get(this.updateMainPhotoUrl + projectId + "/get_main_photo/" ,
+ //    		{
+	// 			headers: header
+	// 		})
+	// 		.map((responseData) => {
+	// 			let photo = JSON.parse(responseData.json());	
+	// 			header.delete('Content-Type');
+	// 			console.log("eita");
+	// 			return new Photo(
+	// 					photo[0].pk, 
+	// 					photo[0].fields.created,
+	// 					photo[0].fields.file,
+	// 					photo[0].fields.position,
+	// 					photo[0].fields.step,
+	// 					photo[0].fields.isProjectPhoto
+	// 				);
+	// 		});
 
 
-	    }
+	// }
 
-		return this.http.post(this.listPhotosUrl + photoToSave['step'] + "/photos/add/",
-			body, {
+	setMainPhotoOfProject(projectId:number, photoToSave:Photo, header: Headers) {
+
+		// delete photoToSave.file; //the file won't be updated, so we need to remove it from the body of the request
+		photoToSave.isProjectPhoto = true;
+	    let body = JSON.stringify(photoToSave);
+
+	    if (header.get('Content-Type')!='application/json')
+	    	header.append('Content-Type', 'application/json');
+
+	    return this.http.put(this.updateMainPhotoUrl + projectId + "/photo_id/" + photoToSave.id + "/" ,
+    		body, {
 				headers: header
 			})
 			.map((responseData) => {
 				let photo = responseData.json();
 				header.delete('Content-Type');
+
 				return new Photo(
 						photo.id, 
-						photo.create,
+						photo.created,
 						photo.file,
-						photo.step
+						photo.position,
+						photo.step,
+						photo.isProjectPhoto
 					);
 			});
+
 	}
 
 	getPhotoDetail(step_id: number, photo_id: number, header: Headers) {
@@ -96,10 +146,12 @@ export class PhotoService {
 				.map((responseData) => {
 					let photo = JSON.parse(responseData.json());
 					return new Photo(
-							photo[0].pk, 
-							photo[0].fields.create,
+							photo[0].id, 
+							photo[0].fields.created,
 							photo[0].fields.file,
-							photo[0].fields.step
+							photo[0].fields.position,
+							photo[0].fields.step,
+							photo[0].fields.isProjectPhoto
 						);
 				});
 	}

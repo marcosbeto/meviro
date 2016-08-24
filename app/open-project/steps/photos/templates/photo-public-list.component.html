@@ -1,0 +1,52 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="jumbotron">
+			<div *ngIf="photos">
+				<div class="container-fluid" style="overflow:hidden;" [style.height]="isPhotosContainerExpanded || photos.length<4 ? 'auto' : '300px'">
+					<div *ngFor="let photo of photos; let i = index;" [ngClass]="{row: isNewRow(i)}">
+						<div [ngClass]="{'col-xs-12': isNewCol(i,'col-12'), 'col-xs-6': isNewCol(i,'col-6'), 'col-xs-4': isNewCol(i,'col-4')}" [style.padding] = "isNewCol(i,'col-12') ? '4px 20px 4px 20px' : isNewCol(i,'col-4') ? '5px 15px 5px 5px' : '5px'" >
+							<div *ngIf="photo.file">
+								<div [ngStyle]="{'background-image': 'url(http://localhost:8000/'+ photo.file, 
+								'height':'200px',
+								'background-size':'cover',
+	    						'background-repeat':'no-repeat',
+	    						'background-position': 'center center'}">
+										
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row text-center" *ngIf="photos.length>3">	
+					<div *ngIf="isPhotosContainerExpanded">
+						<a (click)="isPhotosContainerExpanded = !isPhotosContainerExpanded">
+							Reduzir
+						</a>	
+					</div>
+					<div *ngIf="!isPhotosContainerExpanded">
+						<a (click)="isPhotosContainerExpanded = !isPhotosContainerExpanded">
+							Ver todas as fotos
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- i==0 || i==2 || i ==5 || ((i%2)==0
+
+ngClass]="{'col-xs-12': isNewCol(i,'col-12') i==0 || (i-6)==0, 'col-xs-6': (i)==1 || (i)==2 || (i-6)==1 || (i-6)==2, 'col-xs-4': (i)==3 || (i)==4 || (i)==5 || (i-6)==3 || (i-6)==4 || (i-6)==5}"> -->
+
+
+<!-- <div *ngIf="photos">
+	<div  style="line-height: 0;column-count:5;column-gap:0px;">
+		<div *ngFor="let photo of photos; let i = index">
+			<img src="http://localhost:8000/{{photo.file}}" style="width:100%;height:auto;" />
+		</div>
+	</div>
+</div> -->
+
+
+
+<!-- Passo Título: <input type="text" required [(ngModel)]="model.title"> -->

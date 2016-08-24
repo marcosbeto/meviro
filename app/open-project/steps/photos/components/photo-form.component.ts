@@ -16,7 +16,7 @@ import { UPLOAD_DIRECTIVES } from 'ng2-uploader/ng2-uploader';
 	directives: [UPLOAD_DIRECTIVES]
 })
 
-export class PhotoFormComponent implements OnInit, DoCheck {
+export class PhotoFormComponent implements OnInit, DoCheck { //todo: delete this component because its not being used
 
 	@Input() photosArray: Photo[];
 	@Output() photosListChange = new EventEmitter();
@@ -24,14 +24,17 @@ export class PhotoFormComponent implements OnInit, DoCheck {
 	@Input() stepId: number;
 	@Input() projectId: number;
 
-	zone: NgZone;
+	
 
 	model: Photo;
 	project_id: string;
 
 	uploadedFiles: any[] = [];
   	options: Object = {
-    	url: 'http://localhost:8000/upload'
+    	url: 'http://localhost:8000/upload',
+    	// withCredentials: true,
+    	authToken: localStorage.getItem('id_token'),
+    	authTokenPrefix: "JWT" // required only if different than "Bearer"
   	};
 
 	constructor(
@@ -39,23 +42,30 @@ export class PhotoFormComponent implements OnInit, DoCheck {
 		private router: Router,
 		private authService: AuthService, 
 		private _routeParams:ActivatedRoute,
-		zone: NgZone
+		private zone: NgZone
 		) {
 
-		this.zone = zone;
-		this.model = new Photo(null, null, null, null);
+		this.model = new Photo(null, null, null, null, null, null);
 
 	}
 
+	onChange() {
+		console.log("eita");
+	}
+
+	getEvent(event:any) {
+		console.log(event.files = null);
+	}
+
 	handleUpload(stepId: string, projectId: string, data:any): void {
+
 
 		if (data && data.response) {
 			data = JSON.parse(data.response);
 			this.uploadedFiles.push(data);
 			this.model = data;
+			this.model.file = data.file.substring(data.file.indexOf('static'),data.file.length); //todo: understand why the path of image is complete, including localhost
 
-			data.file = data.file.substring(data.file.indexOf('static'));
-			
 			this.photosListChange.emit({
 		      photo: this.model
 		    });
@@ -63,58 +73,18 @@ export class PhotoFormComponent implements OnInit, DoCheck {
 	}
 
 	ngOnInit() {	
-		
 		if (this.stepId)
-			this.model = new Photo(null, null, null, this.stepId);
-
+			this.model = new Photo(null, null, null, null, this.stepId, null);
 		this.options['url'] = "http://localhost:8000/upload/projects/"+ this.projectId + "/step/" + this.stepId + "/";
-		
-		this._routeParams.params.subscribe(params => {
-	      let photo_id = Number.parseInt(params['photo_id']); //getting the id of the project 
-
-	      this.project_id = this._routeParams.url['_value'][1]['path'];
-	      if (photo_id && this._routeParams.url['_value'][3] && this._routeParams.url['_value'][5]) { //if an `id` is presented at the URL 
-	      
-      		let action = this._routeParams.url['_value'][5]['path'];
-      		let step_id = this._routeParams.url['_value'][3]['path'];
-
-	      	if (action=="delete") {
-	      		this.deletePhoto(step_id, photo_id);
-	      	}
-	      	else {
-	      		this.getPhotoDetail(step_id, photo_id);
-	      	}
-	      }
-	    });
-		
+		console.log("reiniciando");
 	}
 
-	ngDoCheck() { //when modal is opened more than one time, we need to upload those values 
-
-	     this.zone.run(() => {
-        
-      }); 
-		
+	ngDoCheck() { //when modal (add photo modal) is opened more than one time, we need to upload those values 
+		this.zone.run(() => {
+		});
+		console.log("checando");
 		this.options['url'] = "http://localhost:8000/upload/projects/"+ this.projectId + "/step/" + this.stepId + "/";	
-	}
 
-	savePhoto(step_id:number) {
-
-		let updating = false;
-		if (this.model.id)
-			updating = true;
-
-		this.photoService.savePhoto(step_id, this.model, this.authService.headers)
-			.subscribe(result => { 
-				console.log(result);
-				this.model = result;
-				this.photosListChange.emit({
-			      photo: this.model
-			    });
-			    if (!updating)
-					this.model = new Photo(null, null, null, this.stepId); //reseting step form
-			}
-		);
 	}
 
 	getPhotoDetail(step_id:number, photo_id: number) { 
@@ -130,7 +100,7 @@ export class PhotoFormComponent implements OnInit, DoCheck {
 		this.photoService.deletePhoto(step_id, photo_id, this.authService.headers)
 			.subscribe(result => { 
 				console.log("apagado");
-				this.model = new Photo(photo_id, null, null, step_id); //reseting step form
+				this.model = new Photo(photo_id, null, null, null, step_id, null); //reseting step form
 				this.photosListChange.emit({
 			      photo: this.model,
 			      action: 'delete'

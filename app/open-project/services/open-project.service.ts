@@ -13,6 +13,9 @@ export class OpenProjectService {
 	listProjectsUrl: string;
 	updateProjectUrl: string;
 	deleteProjectUrl: string;
+	detailProjectUrl: string;
+
+
 	publicAction: boolean = false;
 
 	constructor(private http: Http, private authService: AuthService) {
@@ -31,6 +34,8 @@ export class OpenProjectService {
 		this.listProjectsUrl = this.baseUrl + "projects/";
 		this.updateProjectUrl = this.listProjectsUrl + "update/";
 		this.deleteProjectUrl = this.listProjectsUrl + "delete/";
+		this.detailProjectUrl = "http://localhost:8000/public-project/";
+
 	}
 
 	getProjects(header: Headers){
@@ -55,7 +60,8 @@ export class OpenProjectService {
 									project.fields.difficulty, 
 									project.fields.tags, 
 									project.fields.abstract,
-									project.fields.metauser_id
+									project.fields.metauser_id,
+									project.fields.main_photo
 								)
 							);
 						});
@@ -65,9 +71,17 @@ export class OpenProjectService {
 				});
 	}
 
-	getProjectDetail(projectID: number, header: Headers) {
+	getProjectDetail(projectID: number, isPublic:boolean, header: Headers) {
 
-		return this.http.get(this.listProjectsUrl + projectID + "/", {
+		let url:string;
+
+		if (isPublic) 
+			url = this.detailProjectUrl;
+		else
+			url = this.listProjectsUrl;
+
+
+		return this.http.get(url + projectID + "/", {
 					headers: header
 				})
 				.map((responseData) => {
@@ -82,7 +96,8 @@ export class OpenProjectService {
 						project[0].fields.difficulty, 
 						project[0].fields.tags, 
 						project[0].fields.abstract,
-						project[0].fields.metauser_id
+						project[0].fields.metauser_id,
+						project[0].fields.main_photo
 					);
 				});
 	}
@@ -91,7 +106,8 @@ export class OpenProjectService {
 
 	    let body = JSON.stringify(projectToSave);
 
-	    header.append('Content-Type', 'application/json');
+	    if (header.get('Content-Type')!='application/json')
+			header.append('Content-Type', 'application/json');
 
 	    if (projectToSave.id!=null) { //update
 	    	return this.http.put(this.updateProjectUrl + projectToSave.id + "/",
@@ -111,7 +127,8 @@ export class OpenProjectService {
 									project.difficulty, 
 									project.tags, 
 									project.abstract,
-									project.metauser_id
+									project.metauser_id,
+									project.main_photo
 								)
 				});
 
@@ -134,7 +151,9 @@ export class OpenProjectService {
 							project.difficulty, 
 							project.tags,
 							project.abstract, 
-							project.metauser_id
+							project.metauser_id,
+							project.main_photo
+
 						);
 		});
 	}

@@ -9,7 +9,8 @@ export class OpenProject {
 		public difficulty?: string,
 		public tags?: string,
 		public abstract?: string,
-		public metauser_id?: number
+		public metauser_id?: number,
+		public main_photo?: string
 	) { }
 }
 // export class OpenProject {

@@ -9,12 +9,15 @@
 	<div class="col-xs-12">
 		<label class="btn btn-success btn-file">
 		    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Selecione suas fotos
-		    <input type="file" 
+		    
+		    <!-- <input #elem type="file" 
 		    [ng-file-select]="options" 
 		    (onUpload)="handleUpload(stepId, projectId, $event)"
+		    (change)="elem.files=null;"
 		    multiple
 		    class="btn btn-success"
-		     style="display: none;">
+		    > -->
+
 		</label>
 	</div>
 </div>

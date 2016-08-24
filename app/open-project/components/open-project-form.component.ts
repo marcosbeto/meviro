@@ -62,6 +62,7 @@ export class OpenProjectFormComponent implements OnInit {
 			this.action = "update";
 
 	}
+
 	
 	dropdownSetup(category:any) {
 
@@ -81,7 +82,7 @@ export class OpenProjectFormComponent implements OnInit {
 	}
 
 	getProjectDetail(id: number) { 
-		this.openProjectService.getProjectDetail(id, this.authService.headers)
+		this.openProjectService.getProjectDetail(id, false, this.authService.headers)
 			.subscribe(result => { 
 				this.model = result;
 				this.project_id = this.model.id;
@@ -92,6 +93,10 @@ export class OpenProjectFormComponent implements OnInit {
 					} 
 					return false;
 				})[0];
+
+				if (!this.selectedCategory)
+					this.selectedCategory = {'id':0, 'name':'Selecione uma categoria'};
+
 			}
 		);
 	}

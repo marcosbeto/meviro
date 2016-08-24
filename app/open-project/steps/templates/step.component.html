@@ -1,29 +1,59 @@
-	<div *ngFor="let step of steps; let i=index" [dragula]='"first-bag"' #stepsitem>
-
-		<div class="row" id="stepContainer_{{i}}" style="margin-right:0px;margin-left: 0px;display:block;margin-bottom: 14px;background-color: #f7f7f9;border: 1px solid #e1e1e8;border-radius: 4px;padding: 20px;margin-top: 16px;cursor: move;cursor: grab;cursor: -moz-grab;cursor: -webkit-grab;text-align:center;">
-			<div class="col-xs-4" style="border-right: 1px solid #dadada;min-height: 90px;">
-				Passo {{i+1}}: <input class="position_input" type="text" value="{{i}}">
-				<h2 style="line-height: 5pt;">
-					{{step.title}}
-				</h2>
-				<br>
-				<a (click)="stepForm.openModal('updateStep', step.project, step.id, true, null)"><i class="fa fa-edit" aria-hidden="true" title="Toggle dropdown menu"></i></a> | <a (click)="stepForm.deleteStep(step.project, step.id, null)"><i class="fa fa-trash" aria-hidden="true" title="Toggle dropdown menu"></i></a>
-			</div>
-			<div class="col-xs-4" style="border-right: 1px solid #dadada;min-height: 90px;">
-				<div class="row">
-					Descrição:
-				</div>
-			</div>
-			<div class="col-xs-4">
-				<button class="btn btn-default" (click)="stepForm.openModal('addPhoto', step.project, step.id, true, step)">Gerenciar Fotos</button>
-			</div>
-	  	</div>
-
-  	</div>
-
 <new-step #stepForm='stepForm' [projectId]="project_id" [steps_parent]="steps" [stepsArray]="steps" (stepsListChange)="addStepToArray_Listener($event);">
 	
 </new-step>
 
+<div *ngIf="steps">
+	<div class="panel-body" dnd-sortable-container [dropZones]="['boxers-zone']" [sortableData]="steps">
+	    <div *ngFor="let step of steps; let i = index" dnd-sortable (onDropSuccess)="updatePosition($event)" [sortableIndex]="i" class="panel panel-default">
+			
+			<div class="panel-heading" style="cursor:move;">
+				<div class="row">
+					<div class="col-xs-6 text-left" style="font-size: 17pt;position: inherit;">
+						<table style="margin-top:4px;">
+							<tr>
+								<td>
+									<span class="label label-default" style="font-size: 10pt;background-color:#749c60;">
+										Etapa {{i+1}}
+									</span> 
+								</td>
+								<td style="padding-top:3px;padding-left:7px;">
+									<span style="font-size:16pt;"><b>{{step.title}}</b></span>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div class="col-xs-6 text-right">
+						<button  class="btn btn-default" (click)="stepForm.openModal('updateStep', step.project, step.id, true, null)"><span class="glyphicon glyphicon-edit"></span> Editar</button>
+						<button class="btn btn-default" (click)="stepForm.openModal('addPhoto', step.project, step.id, true, step)"><span class="glyphicon glyphicon-picture"></span> Adicionar Fotos</button>
+						<button class="btn btn-default" (click)="stepForm.deleteStep(step.project, step.id, null)"><span class="glyphicon glyphicon-trash" style="padding: 3px;"></span></button>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body text-left">
+				<div>
+					 <div *ngIf="isStepsCollapsed">
+						<div *ngIf="!isStepsCollapsed[i]">
+							<a (click)="isStepsCollapsed[i]=!isStepsCollapsed[i]" style="color:#777;">
+								<span class="glyphicon glyphicon-triangle-bottom"></span> Clique para ver o texto
+							</a>
+						</div>
+						<div *ngIf="isStepsCollapsed[i]">
+							<a (click)="isStepsCollapsed[i]=!isStepsCollapsed[i]" style="color:#777;">
+								<span class="glyphicon glyphicon-triangle-top"></span> Clique para esconder o texto
+							</a>
+						</div>
+					</div>
+				</div>
+				
+				<div *ngIf="isStepsCollapsed[i]">
+					<div [innerHTML]="'<hr>' + step.content" class="text-left"></div>
+				</div>
+					
+				<!-- <div [innerHTML]="step.content" class="text-left"></div> -->
+			</div>
+			<input class="position_input" [(ngModel)]="step.position" style="visibility:hidden;width:0px;height:0px;" />
+		</div>
+	</div>
+</div>
 
 <!-- Passo Título: <input type="text" required [(ngModel)]="model.title"> -->

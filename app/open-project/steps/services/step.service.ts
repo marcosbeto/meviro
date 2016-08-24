@@ -22,9 +22,17 @@ export class StepService {
 		this.listProjectsUrl = this.baseUrl + "projects/";
 	}
 
-	getSteps(projectID:number, header: Headers){
+	getSteps(projectID:number, isPublic:boolean, header: Headers){
+
+		let url:string;
+
+		if (isPublic)
+			url = "http://localhost:8000/project/" + projectID + "/";
+		else
+			url = this.listProjectsUrl + projectID + "/steps/";
+
 			
-		return this.http.get(this.listProjectsUrl + projectID + "/steps/", {
+		return this.http.get(url, {
 					headers: header
 				})
 				.map((responseData) => {
@@ -45,7 +53,8 @@ export class StepService {
 
 	    let body = JSON.stringify(stepToSave);
 
-	    header.append('Content-Type', 'application/json');
+	    if (header.get('Content-Type')!='application/json')
+	    	header.append('Content-Type', 'application/json');
 
 	    if (stepToSave.id!=null) { //update
 	    	return this.http.put(this.baseUrl + "steps/update/" + stepToSave.id + "/" ,
@@ -60,6 +69,8 @@ export class StepService {
 
 
 	    }
+
+	    console.log()
 
 		return this.http.post(this.listProjectsUrl + stepToSave.project + "/steps/add/", 
 			body, {

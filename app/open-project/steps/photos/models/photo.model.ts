@@ -1,9 +1,11 @@
 export class Photo {
 	constructor (
 		public id: number,
-		public create?: string,
+		public created?: string,
 		public file?: string,
-		public step_id?: number
+		public position?: number,
+		public step?: number,
+		public isProjectPhoto?: boolean
 	) { }
 }
 
