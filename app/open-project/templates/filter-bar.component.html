@@ -1,0 +1,39 @@
+<div class="row" style="background-color: #E2E2E2;padding:20px;">
+	<div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 text-center" style="padding-top:12px;">
+		<form class="form-horizontal">
+  			<div class="form-group">
+  				<div class="btn-group" dropdown keyboardNav="true">
+					<button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" style="width:300px;height: 57px;font-size: 12pt;" dropdownToggle>
+						<span *ngIf="selectedCategory">{{selectedCategory.name}}</span> 
+						<span class="glyphicon glyphicon-triangle-bottom" style="margin:0 0px 0 5px;"></span>
+					</button>
+					<ul class="dropdown-menu" dropdownMenu role="menu" aria-labelledby="simple-btn-keyboard-nav" style="right:0px;background-color:#f5f5f5;">
+
+						<div *ngFor="let category of categories;let i=index">
+							<a class="dropdown-item" (click)="dropdownSetup(category)" style="color:#000;">	
+								<li role="menuitem" style="padding: 10px;font-size: 14pt;font-weight:bold;" class="text-center">
+								    {{category.name}}
+								</li>
+							</a>
+							<li *ngIf="i<categories.length-1" role="separator" class="divider"></li>
+						</div>
+
+					<!-- 	<li role="menuitem"><a class="dropdown-item" (click)="model.category='1'">Action</a></li>
+						<li role="menuitem"><a class="dropdown-item" (click)="model.category='2'">Another action</a></li>
+						<li role="menuitem"><a class="dropdown-item" (click)="model.category='3'">Something else here</a></li> -->
+					</ul>
+				</div>
+		    	<!-- 
+		    	<div class="col-sm-10">
+			      	<select class="form-control">
+						<option>Tipo de deficiência</option>
+						<option>Motora</option>
+						<option>Locomotiva</option>
+						<option>Auditiva</option>
+						<option>Visual</option>
+					</select>
+			    </div> -->
+			</div>
+		</form>		
+	</div>
+</div>

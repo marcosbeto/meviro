@@ -1,11 +1,11 @@
 	<header-outlet></header-outlet>
 	
 	<div *ngIf="router.url=='/'">
-		<landing-outlet></landing-outlet>
-		<filter-bar-outlet></filter-bar-outlet>
+		<landing-outlet ></landing-outlet>
 	</div>
 	
-	<router-outlet></router-outlet>
+	<!-- <open-project-list ></open-project-list> -->
+	<router-outlet [categorySelected]="categorySelected"></router-outlet>
 	<!-- <alert type="info">ng2-bootstrap hello world!</alert> -->
 
 

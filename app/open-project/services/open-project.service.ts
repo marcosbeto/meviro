@@ -14,6 +14,7 @@ export class OpenProjectService {
 	updateProjectUrl: string;
 	deleteProjectUrl: string;
 	detailProjectUrl: string;
+	countProjects:number;
 
 
 	publicAction: boolean = false;
@@ -38,30 +39,40 @@ export class OpenProjectService {
 
 	}
 
-	getProjects(header: Headers){
+	getProjects(header: Headers, page:number, category:number){
 
-		return this.http.get(this.listProjectsUrl, {
+		let pageUrl = "";
+		let categoryUrl = "";
+
+		if (page)
+			pageUrl="?page="+page;
+
+		if (category)
+			categoryUrl="&category="+category;
+
+		return this.http.get(this.listProjectsUrl + pageUrl + categoryUrl, {
 					headers: header
 				})
 				.map((responseData) => {
-					let projects = JSON.parse(responseData.json());				
+					let projects = responseData.json().results;				
+					this.countProjects = responseData.json().count;
 					let allProjects: Array<OpenProject> = [];					
 					
 					if (projects) {						
-						projects.forEach((project:any) => {						
+						projects.forEach((project:any) => {	
 							allProjects.push(
 								new OpenProject(
-									project.pk, 
-									project.fields.title, 
-									project.fields.author, 
-									project.fields.date, 
-									project.fields.last_update_date, 
-									project.fields.category, 
-									project.fields.difficulty, 
-									project.fields.tags, 
-									project.fields.abstract,
-									project.fields.metauser_id,
-									project.fields.main_photo
+									project.id, 
+									project.title, 
+									project.author, 
+									project.date, 
+									project.last_update_date, 
+									project.category, 
+									project.difficulty, 
+									project.tags, 
+									project.abstract,
+									project.metauser_id,
+									project.main_photo
 								)
 							);
 						});
